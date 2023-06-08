@@ -1,0 +1,84 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Local Wave Field Synthesis by Temporal Bandlimitation*
+\thanks{This work was supported by the János Bolyai Research Scholarship of the Hungarian Academy of Sciences, the ÚNKP-22-5-BME-318 New National Excellence Program of the Ministry for Innovation and Technology from the source of the National Research, Development and Innovation Fund
+and by the OTKA PD-143129 and OTKA K-143436 grants.
+}
+}
+
+\author{\IEEEauthorblockN{Gergely Firtha}
+\IEEEauthorblockA{\textit{Dept. of Networked Systems and Services} \\
+\textit{Budapest University of Technologies and Economics}\\
+H-1111 Budapest, Hungary \\
+firtha@hit.bme.hu}
+\and
+\IEEEauthorblockN{Nara Hahn}
+\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+\textit{name of organization (of Aff.)}\\
+City, Country \\
+email address or ORCID}
+\and
+\IEEEauthorblockN{Frank Schultz}
+\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+\textit{name of organization (of Aff.)}\\
+City, Country \\
+email address or ORCID}
+\and
+\IEEEauthorblockN{Péter Fiala}
+\IEEEauthorblockA{\textit{Dept. of Networked Systems and Services} \\
+\textit{Budapest University of Technologies and Economics}\\
+H-1111 Budapest, Hungary \\
+fiala@hit.bme.hu}
+}
+
+\maketitle
+
+\begin{abstract}
+    Wave Field Synthesis (WFS) aims at the reproduction of a desired target wavefront by driving an ideally continuous loudspeaker distribution with properly chosen secondary source driving signals.
+    In practical applications, using a discrete set of loudspeakers degrades the accuracy of reproduction heavily due to the violation of the theoretical requirements.
+    As a result, spatial aliasing wavefronts emerge from the individual loudspeaker elements in addition to the intended virtual wavefront, perceived as strong colouration above the so-called spatial aliasing frequency.
+    Local Wave Field Synthesis (LWFS) approaches improve the reproduction accuracy over a limited listening area by allowing stronger artefacts outside the control region.
+    The present contribution discusses a novel LWFS approach, relying on the transformation of spatially defined antialiasing filters into an equivalent temporal filter bank.
+    The resulting antialiased driving functions ensure aliasing-free synthesis at a predefined listening position at the cost of temporally bandlimited sound field at other listening regions.
+    The results of the proposed approach are compared with a recent LWFS approach employing direct spatial bandlimitation.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Wave Field Synthesis, LWFS, Spatial antialiasing
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+
+
+
+\section*{Acknowledgment}
+
+This work was supported by the János Bolyai Research Scholarship of the Hungarian Academy of Sciences, the ÚNKP-22-5-BME-318 New National Excellence Program of the Ministry for Innovation and Technology from the source of the National Research, Development and Innovation Fund
+and by the OTKA PD-143129 and OTKA K-143436 grants.
+
+\begin{thebibliography}{00}
+\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
+\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
+\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
+\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
+\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
+\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
+\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
+\end{thebibliography}
+\vspace{12pt}
+\color{red}
+IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
+
+\end{document}

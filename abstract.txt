@@ -1,0 +1,9 @@
+Local Wave Field Synthesis by Temporal Bandlimitation
+
+Wave Field Synthesis (WFS) aims at the reproduction of a desired target wavefront by driving an ideally continuous loudspeaker distribution with properly chosen secondary source driving signals.
+In practical applications, using a discrete set of loudspeakers degrades the accuracy of reproduction heavily due to the violation of the theoretical requirements.
+As a result, spatial aliasing wavefronts emerge from the individual loudspeaker elements in addition to the intended virtual wavefront, perceived as strong colouration above the so-called spatial aliasing frequency.
+Local Wave Field Synthesis (LWFS) approaches improve the reproduction accuracy over a limited listening area by allowing stronger artefacts outside the control region.
+The present contribution discusses a novel LWFS approach, relying on the transformation of spatially defined antialiasing filters into an equivalent temporal filter bank.
+The resulting antialiased driving functions ensure aliasing-free synthesis at a predefined listening position at the cost of temporally bandlimited sound field at other listening regions.
+The results of the proposed approach are compared with a recent LWFS approach employing direct spatial bandlimitation.
