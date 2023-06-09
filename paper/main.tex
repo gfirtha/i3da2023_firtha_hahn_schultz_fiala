@@ -7,6 +7,9 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+
+\input{scidefs}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -60,23 +63,80 @@ Wave Field Synthesis, LWFS, Spatial antialiasing
 
 \section{Introduction}
 
+\section{Theoretical basics}
+\subsection{The local propagation vector:}
+Consider an arbitrary steady-state free space sound field at an angular frequency $\omega$.
+As a standard ansatz in the field of geometrical acoustics the sound field can be written in the general polar from as 
+\begin{equation}
+P(\vx,\omega) = A^P(\vx) \te^{- \ti \omega \phi^P(\vx)},
+\label{eq:Pxw}
+\end{equation}
+where $A^P(\vx)$ and $\phi^P(\vx)$ are real-valued functions. 
+This formulation applies to both plane waves and (3D) point sources.
+The propagation dynamics of the sound field are governed by its phase function $\phi^P(\vx)$, termed as the eikonal in the field of ray acoustics.
+In the temporal domain, the sound field can be obtained by taking the inverse Fourier transform of \eqref{eq:Pxw}, yielding:
+\begin{equation}
+p(\vx,t) = A^P(\vx) \, \delta \! \left( t - \phi^P(\vx)\right).
+\end{equation}
+From the above formulation it is evident that the eikonal $\phi^P(\vx)$ describes the propagation delay the wavefront takes to arrive at $\vx$.
+The eikonal equation is obtained by substituting the ansatz \eqref{eq:Pxw} into the Helmholtz equation, stating that in a source free volume 
+\begin{equation}
+    \left| \nabla \phi^P(\vx) \right| = \frac{1}{c}
+\end{equation}
+is fulfiled.
+The gradient of the eikonal is termed as the local propagation vector 
+\begin{equation}
+    \hat{\vk}^P(\vx) = \posvec{3}{\hat{k}_x^P(\vx)}{\hat{k}_y^P(\vx)}{\hat{k}_z^P(\vx)} = c \nabla_{\! \vx} \phi^P(\vx,\omega).
+\end{equation}
+In steady-state, the local propagation vector is perpendicular to the wavefront (equiphase positions) at an arbitrary location with unit length pointing towards the local propagation direction \cite{Firtha2016}.
+In the temporal domain it points into the local propagation direction at the time instant of the wavefront passby.
 
+%For simplicity, in the followings we assume that all the involved fields propagate horizontally in the plane of investigation, i.e. $\hat{k}_z^P(x,y,0) = 0$.
 
+\subsection{2.5D Wave Field Synthesis:}
+Consider a smooth convex secondary source distribution located at $\vxo = \posvec{3}{x_0}{y_0}{0}$ consisting of a continuous distribution of 3D point sources, described by the 3D Green's function.
+In this geometry the target field inside the area bounded by the SSD is described by the  Kirchhoff approximation of 2.5D Kirchhoff-Helmholtz integral, from which the 2.5D driving functions can be extracted.
+For an arbitrary simple target virtual sound field $P(\vxo,\omega)$ the steady-state driving functions read as \cite{Firtha2016}
+\begin{equation}
+D(\vxo,\omega) = \underbrace{\sqrt{8\pi \frac{\ti \omega}{c}}}_{ H_{\text{pre}}(\omega) }
+w(\vxo) \sqrt{d_{\mathrm{ref}}(\vxo)}
+ P(\vxo,\omega)
+\label{Eq:WFS25D}
+\end{equation}
+The driving function consists of 
+\begin{itemize}
+    \item a frequency dependent pre-equalization filter $H_{\text{pre}}(\omega)$ 
+    \item a secondary source selection window 
+    \begin{equation}
+        w(\vxo) = \max{\left( \hat{k}_{\mathrm{n}}^P(\vxo),0\right)}, 
+    \end{equation}
+    where $\hat{k}_{\mathrm{n}}^P(\vxo)$ is the normal component of the local propagation vector 
+    \item a gain factor $\sqrt{d_{\mathrm{ref}}(\vxo)}$ allowing amplitude correction along a reference curve, depending on the actual virtual field model (c.f. \cite{Firtha2016})
+    \item the virtual field measured on the SSD.
+\end{itemize}
+Assuming a simple virtual sound field as given by \eqref{eq:Pxw} the driving functions can be written 
+\begin{equation}
+    D(\vxo,\omega) = H_{\text{pre}}(\omega)
+    \underbrace{ w(\vxo)  \, \sqrt{d_{\mathrm{ref}}(\vxo)} \, A^P(\vxo) }_{A^D(\vxo)} \te^{- \ti \omega \phi^P(\vxo)}
+\end{equation}    
+and in the time domain as
+\begin{equation}
+d(\vxo,t) = h_{\text{pre}}(t) \ast_t  A^D(\vxo)\,  \delta\left( t - \phi^P(\vxo)\right),
+\label{eq:d_wfs_td}
+\end{equation}
+with $A^D(\vxo)$ being the real valued overall gain factor of the driving function, $\ast_t$ denoting temporal convolution and $h_{\text{pre}}(t)$ is the temporal WFS prefilter impulse response.
+For an analyitcal FIR pre-equalization filter implementation the reader is referred to \cite{Schultz2016}.
+In the following due to the associativity of convolution this prefiltering is excluded from the discussion.
+
+\subsection{Aliasing artifacts in WFS}
 
 \section*{Acknowledgment}
 
 This work was supported by the János Bolyai Research Scholarship of the Hungarian Academy of Sciences, the ÚNKP-22-5-BME-318 New National Excellence Program of the Ministry for Innovation and Technology from the source of the National Research, Development and Innovation Fund
 and by the OTKA PD-143129 and OTKA K-143436 grants.
 
-\begin{thebibliography}{00}
-\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
-\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
-\end{thebibliography}
+\bibliographystyle{unsrt}
+\bibliography{dissertation}
 \vspace{12pt}
 \color{red}
 IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
