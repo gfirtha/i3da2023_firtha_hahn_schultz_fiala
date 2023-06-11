@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{overpic,subfigure, tikz}
 
 \input{scidefs}
 
@@ -93,7 +94,7 @@ In the temporal domain it points into the local propagation direction at the tim
 
 %For simplicity, in the followings we assume that all the involved fields propagate horizontally in the plane of investigation, i.e. $\hat{k}_z^P(x,y,0) = 0$.
 
-\subsection{2.5D Wave Field Synthesis:}
+\subsection{Conventional 2.5D Wave Field Synthesis}
 Consider a smooth convex secondary source distribution located at $\vxo = \posvec{3}{x_0}{y_0}{0}$ consisting of a continuous distribution of 3D point sources, described by the 3D Green's function.
 In this geometry the target field inside the area bounded by the SSD is described by the  Kirchhoff approximation of 2.5D Kirchhoff-Helmholtz integral, from which the 2.5D driving functions can be extracted.
 For an arbitrary simple target virtual sound field $P(\vxo,\omega)$ the steady-state driving functions read as \cite{Firtha2016}
@@ -129,6 +130,127 @@ For an analyitcal FIR pre-equalization filter implementation the reader is refer
 In the following due to the associativity of convolution this prefiltering is excluded from the discussion.
 
 \subsection{Aliasing artifacts in WFS}
+
+\begin{figure*}[h!]
+    \begin{center}
+    \begin{overpic}[width = 0.75\columnwidth]{figs/ideal_synthesis.png}
+        \footnotesize \put(0,2){(a)}
+    \end{overpic} \hspace{2cm}
+    \begin{overpic}[width = 0.75\columnwidth]{figs/aliased_synthesis.png}
+        \footnotesize \put(0,2){(b)}
+    \end{overpic}
+    \\
+    \begin{overpic}[width = 0.75\columnwidth]{figs/ideal_synthesis_spectrum.png}
+        \footnotesize \put(0,0){(c)}
+    \end{overpic} \hspace{2cm}
+    \begin{overpic}[width = 0.75\columnwidth]{figs/aliased_synthesis_spectrum.png}
+        \footnotesize \put(0,0){(d)}
+    \end{overpic}
+\end{center}
+    \caption{fg}
+\label{Fig:aliasing}
+\end{figure*}
+Conventional WFS theory assume a continuous secondary source distribution.
+In practical applications the SSD is composed of evenly spaced discrete source elements.
+As a result, \emph{aliasing wavefronts} emerge from the individual secondary sources, following the intended virtual wavefront, leading to a \emph{spatial aliasing phenomena}.
+Alisaing is perceived as strong colouration predominantly in the high-frequency region varying with the receiver position and the virtual source position/direction, occuring predominantly above the \emph{aliasing frequency}.
+
+Figure \ref{Fig:aliasing} illustrates spatial aliasing in the temporal domain through the example of the synthesis of an impulsive plane wave, arriving from $\phi_{\mathrm{PW}} = 0^{\circ}$, applying a discrete secondary source distribution in comparement with a quasi-continuous synthesis scenario.
+In the current example the SSD is a circular one with the radius of $R_0 = 2~\mathrm{m}$, consisting of $N_0 = 90$ 3D point sources.
+The aliased synthesis in the temporal domain is depicted in Figure \ref{Fig:aliasing} (b).
+
+Mathematically, aliasing can be modeled as the discretization of the theoretically continuous driving functions:
+Assume that a suitable parametrization of the secondary source is given by $d(s,t)$ is given e.g. the arc length $s = R\, \cos \phi$ in case of a circular SSD (where $\phi$ is the polar angle), or the linear position on an infinite long linear SSD.
+The discretization process is given by sampling the driving function by a sampling function, consisting of a series of Dirac-deltas in the actual secondary source positions:
+\begin{equation}
+    d_s(s,t) = \sum_{\nu = 0}^{N_0} d(s,t) \, \delta(s - \nu \Delta s),
+    \label{eq:sampling_td}
+\end{equation}
+where $\Delta s$ is the sampling arc length.
+
+By investigating the sampling process in the frequency-wavenumber domain, the spectrum of the sampled driving function is given by
+\begin{equation}
+    \tilde{D}_s(k_s,\omega) = \sum_{\nu = -\infty}^{\infty} \tilde{D}(k_s- \nu \frac{2\pi}{\Delta s},\omega),
+    \label{eq:sampling_fd}
+\end{equation}
+where $t \rightarrow \omega$ and $s \rightarrow k_s$ are Fourier-transform pairs.
+Obviously, for a closed SSD contour the spatial Fourier-transform yields a discrete spectrum, consisting non-zero components only on the multiples of $\frac{1}{R_0}$ (i.e. a Fourier series).
+In the followings the spatial spectrum refers to the distribution of the non-zero spectral/wavenumber values, and the corresponding wavenumber refers to the spatial frequency of the harmonic basis functions, measured along the closed curve.
+Figure \ref{Fig:aliasing} (c) and (d) illustrate the quasi-continuous and the sampled driving function's spectra.
+
+From \eqref{eq:sampling_fd} it can be concluded that due to spatial sampling, the wavenumber content of the driving function is repeated on the multiples of the sampling wavenumber $k_{s, \mathrm{s}} \frac{2\pi}{\Delta s}$.
+Since the conventional driving functions are not-bandlimited, therefore, the repeating spectra will overlap above the Nyquist wavenumber $k_{s, \mathrm{Nyq}} = \frac{\pi}{\Delta s}$, for which the corresponding angular frequency is the aliasing frequency of the discretization scheme, as depicted in \ref{Fig:aliasing} (d).
+
+Obviously, spatial aliasing can be avoided by analytically spatial-bandlimiting the driving functions to the Nyquist wavenumber.
+This can be performed by either spatially filtering the driving functions with an appropriate spatial low-pass filter prior to numerical evaluation, or performing bandlimitation directly in the wavenumber (modal) domain analytically.
+The latter approach is implemented by \cite{Nara and Fiete}, and will serve as a reference solution in the following investigation.
+However, the modal bandlimitation solution is available only for plane wave and point source virtual source models synthesized by a circular SSD, at the cost of increased computational complexity.
+
+In the following an alternative, approximate solution is presented, allowing spatial antialiasing filtering for an arbitrary virtual source model and arbitrary SSD contour, performed by FIR filtering in the temporal domain.
+The technique relies on an analytical transform of spatially defined antialiasing filters to an equivalent temporal domain filter bank. 
+
+\section{Time domain antialiasing filter design}
+
+\subsection{Spatial to temporal filter transform}
+First, a general transfromation is introduced allowing the transform of an arbitrary spatial filter to an equivalent temporal filter set.
+
+Assume an arbitrary filter impulse response defined in the spatial domain, denoted by $h_x(s)$.
+Again, $s$ is a suitable parametrization of the SSD contour.
+The spatially filtered driving function is obtained from the convolution of the conventional driving functions and the filter impulse response along the SSD contour
+\begin{equation}
+    d'_x(s,t) = h_x(s) \ast_x d(s,t) = \int h_x(s-s_0) \, d(s_0,t) \, \td s_0,
+    \label{eq:spatial_conv}
+\end{equation}
+where $\ast_x$ denotes a circular convolution for a convex SSD contour or a linear convolution in case of an infinite long linear SSD.
+
+Let's assume a temporal filter impulse response, defined for each SSD element $h_t(s,t)$.
+The temporally filtered driving functions are obtained from the temporal convolution of each SSD elements' driving function by the corresponding temporal impulse response
+\begin{equation}
+    d'_t(s,t) = h_t(s,t) \ast_t d(s,t) = \int_{-\infty}^{\infty} h_t(s,t-t_0) \, d(s,t_0) \, \td t_0.
+    \label{eq:temp_conv}
+\end{equation}
+Our aim is to express the temporal filter bank $h_t(s,t)$ in terms of the spatial filter, so that the result of the temporal convolution \eqref{eq:temp_conv} coincides with the spatial filtering result \eqref{eq:spatial_conv}, i.e.
+\begin{equation}
+    d'_x(s,t) = d'_t(s,t)
+\end{equation}
+holds.
+
+The following transformation is allowed by the spatio-temporal structures of the conventional driving functions \eqref{eq:d_wfs_td}, in which the spatial and temporal dimensions are interconnected in the argument of a Dirac-delta, due to the wave propagation characteristics.
+Again, in the following the pre-equalization filter is omitted from discussion, since equalization filtering can be performed following the antialiasing process. 
+
+The temporal convolution in \eqref{eq:temp_conv} can be evaluated by substituting the general WFS driving function \eqref{eq:d_wfs_td} and exploiting the sifting property of the Dirac-delta, yielding
+\begin{equation}
+    d'_t(s,t) = A^D(s) \, h_t \!\left(s,t- \phi^P(s) \right).
+\end{equation}
+With applying a time shift of $\frac{1}{c} \phi^P(s)$ to both sides the temporal filter impulse response is connected with the spatial convolution as
+{\footnotesize
+\begin{multline}
+    h_t\left(s,t\right) = \frac{1}{A^D(s)}\int h_x(s-s_0) \, d\left(s_0,t+ \frac{1}{c} \phi^P(s) \right) \, \td s_0 = \\
+    \frac{1}{A^D(s)} \, \int h_x(s-s_0) \, A^D(s_0) \delta\left( t + \frac{1}{c} \left(  \phi^P(s) - \phi^P(s_0) \right)\right) \td s_0.
+\end{multline}}
+To evaluate the spatial convolution the generalized sifting property of the Dirac-delta may be applied \cite{Firtha2019phd}, which states that
+\begin{equation}
+\int f(s_0) \delta(g(s_0)) \td s_0 = \sum_i \frac{f(s_i)}{| \frac{\partial}{\partial s_0} g(s_0) |_{s = s_i}}, \hspace{3mm} g(s_i) = 0.
+\end{equation}
+In the present problem the zeros of the Dirac's argument are found where         
+\begin{equation}
+    \frac{\phi^P(s_i) }{c} = t + \frac{\phi^P(s)}{c}
+    \label{eq:zero}
+\end{equation}
+is satisfied.
+In the following it is assumed that a single zero $s_i$ exists, satisfying \eqref{eq:zero}.
+This assumption means that the wavefront arrives at each SSD element at a unique time instant, being strictly true for a virtual plane wave and a linear SSD.
+With this assumption and by utilizing that 
+\begin{equation}
+    \frac{\partial}{\partial s_0} g(s_0) = -\frac{1}{c} \frac{\partial}{\partial s_0} \phi^P(s_0) = -\frac{\hat{k}_t^P(s_0)}{c},
+\end{equation}
+i.e. the derivative of the phase function is the tangential component of the local propagation vector, the integral can be evaluated.
+The resulting general transformation relation between the spatial and temporal filters are given as
+\begin{equation}
+    h_t\left(s,t\right) = \frac{A^D(s_i)}{A^D(s)} \, \frac{ c }{|\hat{k}_t^P(s_i)|} h_x(s-s_i).
+\end{equation}
+
+
 
 \section*{Acknowledgment}
 
