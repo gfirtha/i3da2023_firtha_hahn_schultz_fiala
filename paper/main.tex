@@ -215,41 +215,82 @@ Our aim is to express the temporal filter bank $h_t(s,t)$ in terms of the spatia
 \end{equation}
 holds.
 
+\subsubsection{The exact transformation}
 The following transformation is allowed by the spatio-temporal structures of the conventional driving functions \eqref{eq:d_wfs_td}, in which the spatial and temporal dimensions are interconnected in the argument of a Dirac-delta, due to the wave propagation characteristics.
+The main idea of the deriation is that by exploiting the sifting property of the Dirac-delta in the driving functions both spatial and temporal convolutions \eqref{eq:spatial_conv} and \eqref{eq:temp_conv} can be evaluated, from which the temporal filter impulse responses can be expressed as the function of the spatial one. 
 Again, in the following the pre-equalization filter is omitted from discussion, since equalization filtering can be performed following the antialiasing process. 
 
 The temporal convolution in \eqref{eq:temp_conv} can be evaluated by substituting the general WFS driving function \eqref{eq:d_wfs_td} and exploiting the sifting property of the Dirac-delta, yielding
-\begin{equation}
-    d'_t(s,t) = A^D(s) \, h_t \!\left(s,t- \phi^P(s) \right).
-\end{equation}
-With applying a time shift of $\frac{1}{c} \phi^P(s)$ to both sides the temporal filter impulse response is connected with the spatial convolution as
-{\footnotesize
+\begin{align}
+    d'_t(s,t) = A^D(s) \, h_t \!\left(s,t- \phi^P(s) \right) \\
+    d'_t(s,t + \phi^P(s) ) = A^D(s) \, h_t \!\left(s,t\right).
+    \label{eq:temp_conv_eval}
+\end{align}
+For the second equation a time shift of $\phi^P(s)$ was applied for the sake latter simplicity.
+
+The shifted spatially filtered driving function reads as
 \begin{multline}
-    h_t\left(s,t\right) = \frac{1}{A^D(s)}\int h_x(s-s_0) \, d\left(s_0,t+ \frac{1}{c} \phi^P(s) \right) \, \td s_0 = \\
-    \frac{1}{A^D(s)} \, \int h_x(s-s_0) \, A^D(s_0) \delta\left( t + \frac{1}{c} \left(  \phi^P(s) - \phi^P(s_0) \right)\right) \td s_0.
-\end{multline}}
-To evaluate the spatial convolution the generalized sifting property of the Dirac-delta may be applied \cite{Firtha2019phd}, which states that
+    d'_x(s,t+ \phi^P(s) ) = \int h_x(s-s_0) \, d(s_0,t+ \phi^P(s) ) \, \td s_0 = \\
+    \int h_x(s-s_0) \, A^D(s_0)\, \delta(s_0,t+ \left(\phi^P(s)-\phi^P(s_0)\right)  ) \, \td s_0.
+    \label{eq:spat_conv2}
+\end{multline}
+In order to evaluate the spatial convolution the generalized sifting property of the Dirac-delta may be applied \cite{Firtha2019phd}, which states that
 \begin{equation}
 \int f(s_0) \delta(g(s_0)) \td s_0 = \sum_i \frac{f(s_i)}{| \frac{\partial}{\partial s_0} g(s_0) |_{s = s_i}}, \hspace{3mm} g(s_i) = 0.
 \end{equation}
 In the present problem the zeros of the Dirac's argument are found where         
 \begin{equation}
-    \frac{\phi^P(s_i) }{c} = t + \frac{\phi^P(s)}{c}
+    \phi^P(s_i) = t + \phi^P(s)
     \label{eq:zero}
 \end{equation}
 is satisfied.
 In the following it is assumed that a single zero $s_i$ exists, satisfying \eqref{eq:zero}.
 This assumption means that the wavefront arrives at each SSD element at a unique time instant, being strictly true for a virtual plane wave and a linear SSD.
-With this assumption and by utilizing that 
+The derivative of the phase function is given by
 \begin{equation}
-    \frac{\partial}{\partial s_0} g(s_0) = -\frac{1}{c} \frac{\partial}{\partial s_0} \phi^P(s_0) = -\frac{\hat{k}_t^P(s_0)}{c},
+    \frac{\partial}{\partial s_0} g(s_0) = - \frac{\partial}{\partial s_0} \phi^P(s_0) = -\frac{\hat{k}_t^P(s_0)}{c},
 \end{equation}
-i.e. the derivative of the phase function is the tangential component of the local propagation vector, the integral can be evaluated.
-The resulting general transformation relation between the spatial and temporal filters are given as
+i.e. it is the tangential component of the local propagation vector.
+With the above assumptions the integral \eqref{eq:spat_conv2} can be evaluated, yielding
 \begin{equation}
-    h_t\left(s,t\right) = \frac{A^D(s_i)}{A^D(s)} \, \frac{ c }{|\hat{k}_t^P(s_i)|} h_x(s-s_i).
+    d'_x(s,t+ \phi^P(s) ) = h_x(s-s_i) \, A^D(s_i)
+    \label{eq:spat_conv_eval}
 \end{equation}
 
+Finally, by combining \eqref{eq:spat_conv_eval} and \eqref{eq:temp_conv_eval} the resulting general transformation relation between the spatial and temporal filters are given as
+\begin{equation}
+    h_t\left(s,t\right) = \frac{A^D(s_i)}{A^D(s)} \, \frac{ c }{|\hat{k}_t^P(s_i)|} h_x(s-s_i),
+\end{equation}
+where $s_i$ satisfies \eqref{eq:zero}.
+
+\subsubsection{Local plane wave approximation}
+The above formulation already allows one to transform an arbitrary spatial impulse response into an equivalent temporal filter for each SSD element, as long as the virtual field model is known and \eqref{eq:zero} can be solved.
+In order to give a more general solution it is assumed that the virtual field is locally plane, being a usual high frequency assumption in WFS theory. 
+As a further general WFS assumption it is supposed that the SSD is locally plane.
+These requirements inherently ensure that a single solution exists for \eqref{eq:zero}\footnote{Except for a plane wave arriving normally to the SSD, at which case the temporal filter is transformed into a Dirac-delta.}.
+With these assumptions the phase function is given as
+\begin{equation}
+\phi^P(\vx) = \hat{k}^P_x(\vx)x +  \hat{k}^P_y(\vx) y 
+\end{equation}
+and \eqref{eq:zero} is satisfied where 
+\begin{equation}
+    s_i = s + \frac{c \cdot t}{\hat{k}_t^P(s)}
+\end{equation}
+Finally, as a crucial approximation it is assumed that both the amplitude of the driving function and the propagation vector varies slowly along the SSD, i.e $A^D(s_i) \approx A^D(s)$ and $\hat{k}_t^P(s_i) \approx \hat{k}_t^P(s)$ holds.
+With these assumptions the corresponding filter transform reads as
+\begin{equation}
+    h_t\left(s,t\right) =\frac{ c }{|\hat{k}_t^P(s)|} h_x\left(-t \,\frac{c}{\hat{k}_t^P(s)}\right).
+    \label{eq:temporal_transform}
+\end{equation}
+
+Equation \eqref{eq:temporal_transform} can be directly expressed in the spectral domain by taking the Fourier transform of both sides, relating the frequency response of the spatial and the temporal filters. 
+By denoting $\mathcal{F}\left( h_x(s)\right) = H_x(k_s)$ the corresponding transform is given by
+\begin{equation}
+    H_t\left(s,\omega\right) = H_x\left(-\frac{\omega}{c}\hat{k}_t^P(s)\right) = H_x\left(-k_t^P(s)\right),
+    \label{eq:frequency_transform}
+\end{equation}
+where $k_t^P(s)$ is the tangential component of the local wavenumber vector, being a vector in a steady state sound field, pointing in the local propagation direction with the length being $\omega/c$ \cite{Firtha2019phd}.
+Hence, as the main result of the present discussion, the temporal filter transfer can be obtained from the wavenumber (modal) content of the spatial filter by simple rescaling in terms of the local wavenumber vector.
 
 
 \section*{Acknowledgment}
