@@ -1,0 +1,258 @@
+\documentclass[12pt,a4paper]{article}
+
+\newcommand{\note}[1]{{\color{red}#1}}
+%
+\usepackage{layouts}
+\usepackage{amsmath,bm}
+\usepackage{a4wide}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx,overpic,subfigure}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows}
+\usepackage{booktabs} 			% Nice tables
+\usepackage{csquotes}			% Quotation
+\usepackage{multirow} 			% Multirow cells in tables
+\usepackage{rotating}
+\usepackage{pdflscape}
+\usepackage[small,bf]{caption}
+\usepackage{ae,aecompl}
+\usepackage{url}
+\usepackage[american]{babel}
+\usepackage{hyperref}
+\usepackage{nomencl}
+\usepackage[toc,page]{appendix}
+\usepackage{amssymb}
+\usepackage{steinmetz}
+\usepackage{palatino}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{footnote}
+\usepackage{multicol}
+%
+
+\input{mydefs}
+%
+\title{Transforming spatial filters to time domain filters for sound field synthesis driving functions}
+\date{\today \\
+Budapest University of Technology and Economics, \\ Dept. of Networked Systems and Services, \\ Laboratory of Acoustics and Studio Technologies}
+\author{Firtha Gergely}
+
+\begin{document}
+\maketitle
+
+\subsection{General form of driving functions}
+
+\begin{figure}[b!]
+	\centering
+	\begin{overpic}[width = .7\columnwidth ]{figs/general_sfs.png}
+	\small
+	\put(0,26){virtual source}
+	\put(44.5,0.5){$\mathbf{0}$}
+	\put(71,31){$\vx$}
+	\put(39,21){$\vni$}
+	\put(43,15){$\vxo$}
+	\begin{turn}{27}
+	\put(57,-3){$|\vx - \vxo|$}
+	\end{turn}
+	\put(50,35){$\Omega$}
+	\put(80,20.5){$\dO$}
+	\end{overpic}
+	\caption{Geometry for the general sound field synthesis problem}
+	\label{Fig:Theory:general_sfs_geometry}
+\end{figure}
+
+Assume a general 2.5D or 3D sound field synthesis (SFS) problem, as depicted for the 2.5D case in Figure \ref{Fig:Theory:general_sfs_geometry}.
+The virtual source is assumed to be either a 3D plane wave or the field of a point source.
+Generally, such a steady state 3D sound field can be written as
+\begin{equation}
+P(\omega,\vx) = A^P(\vx) \, \te^{-\ti  \omega \phi^P(\vx) } 
+\end{equation}
+while in the time domain reading as
+\begin{equation}
+    p(t,\vx) = A^P(\vx) \, \delta( t -  \phi^P(\vx) ).
+\end{equation}
+The phase function is related to the normalized local wavenumber vector as
+\begin{equation}
+    \frac{1}{c} \hat{k}^P(\vx) =  \nabla_{\vx} \, \phi^P(\vx) .
+\end{equation}
+
+The driving function that synthesises the virtual field with the secondary source distribution is given by
+\begin{itemize}
+    \item for a 3D SFS scenario:
+     \begin{equation}
+        D(\omega, \vxo) = 2 \ti \, w(\vxo) \, \frac{\omega}{c} \, \hat{\kn^P}(\vxo) \, P(\omega,\vxo) 
+     \end{equation}
+    \item for a 2.5D SFS scenario:
+    \begin{equation}
+        D(\vxo, \omega) = w(\vxo) \,
+        \sqrt{ \frac{8\pi \ti \omega}{c} } \, \sqrt{\dref(\vxo)} \,
+        \hat{\kn^P} (\vxo)\, P(\vxo,\omega),
+     \end{equation}
+\end{itemize}
+In both cases the driving functions can be written in the general form of 
+\begin{equation}
+    D(\omega, \vxo) = A(\vxo) \, \te^{-\ti \omega \phi^P(\vxo) },
+ \end{equation}
+ prefiltered with a filter $H(\omega) \sim \ti \omega$ in the 3D and $H(\omega) \sim \sqrt{\ti \omega}$ in the 2.5D case, with also $A(\vx)$ depending on the dimensionality of the problem.
+ Hence--similarly to the virtual field formulation-- the driving function in the time domain reads as
+ \begin{equation}
+   d(t, \vxo) = A(\vxo) \, \delta( t-  \phi^P(\vxo) ).
+   \label{eq:general_driv_fun}
+ \end{equation}
+ 
+\subsection{Problem statement}
+
+The spatial filtering of the driving functions is a frequently emerging question in numerous applications.
+The direct application of real-time spatial filtering may, however, be computationally expensive.
+This section disscusses how spatial convolutional filter can be transformed into temporal filtering by exploiting the nature of the driving functions, discussed for 2.5D synthesis case.
+
+Assume a spatial impulse response given by $h_x(x)$.
+The spatially filtered driving function is given in the time domain as 
+\begin{equation}
+    d'_x(t,\vxo) = \int h_x(\vxo - \vx_1) \, d(t, \vx_1) \, \td \vx_1 
+    \label{eq:d_filt}
+\end{equation}
+
+Since the actual form of the driving function interconnect the spatial and temporal positions: i.e. on each spatial location the temporal shape of the driving function is identical (apart from an amplitude variation), therefore, it is possible to derive a temporal filter impulse response, performing identical filtering as given by \eqref{eq:d_filt}.
+In the followings the identical temporal filter is derived
+
+\subsection{Derivation}
+Assume that a temporal impulse response $h_t(t,\vxo)$ can be formulated so that the spatially filtered driving functions are identical with the temporally filtered driving functions, i.e. 
+\begin{equation}
+    d'_x(t,\vxo)  = \int h_x(\vxo - \vx_1) \, d(t, \vx_1) \, \td \vx_1 = \int h_t(t - t_0,\vxo) \, d(t_0, \vxo) \, \td t_0  = d'_t(t,\vxo) 
+\end{equation}
+hold.
+Let's substitute the assumed, simple form of the general driving functions given by \eqref{eq:general_driv_fun} to each sides resulting in
+\begin{equation}
+    \int h_x(\vxo - \vx_1) \, 
+    A(\vx_1) \, \delta( t-  \phi^P(\vx_1) )
+    \, \td \vx_1 =  A(\vxo)  \int h_t(t - t_0,\vxo)
+    \, \delta( t_0 - \phi^P(\vxo) ) \, \td t_0.
+\end{equation}
+On the right side the sifting property of the Dirac-delta can be exploited directly:
+\begin{equation}
+    \int h_x(\vxo - \vx_1) \, 
+    A(\vx_1) \, \delta( t-  \phi^P(\vx_1) )
+    \, \td \vx_1 = A(\vxo)  h_t(t - \phi^P(\vxo) , \vxo) 
+\end{equation}
+i.e. the (shifted) temporal filter impulse response is given by
+\begin{equation}
+    h_t(t -  \phi^P(\vxo) , \vxo)  = \frac{1}{ A(\vxo) }
+    \int h_x(\vxo - \vx_1) \, 
+    A(\vx_1) \, \delta( t-  \phi^P(\vx_1) )
+    \, \td \vx_1 
+\end{equation}
+For the sake of simplicity let's apply a temporal shift of $+\phi^P(\vxo)$, resulting in
+\begin{equation}
+    h_t(t, \vxo)  = \frac{1}{ A(\vxo) }
+    \int h_x(\vxo - \vx_1) \, 
+    A(\vx_1) \, \delta( t + \phi^P(\vxo)- \phi^P(\vx_1) )
+    \, \td \vx_1 
+\end{equation}
+
+\vspace{1cm}
+The spatial convolution can be evaluated by exploiting the generalized sifting property of the Dirac-delta
+\begin{equation}
+    \int_{-\infty}^{\infty} f(x) \, \delta(g(x)) \, \td x = \sum_{i} \frac{f(x_i)}{\left| \frac{\partial}{\partial x} g(x) \right|_{x = x_i}}, \hspace{5mm} \text{where} \hspace{5mm} g(x_i) = 0.
+\end{equation}
+or in terms of contour integration as
+\begin{equation}
+    \int f(\vx_1) \, \delta(g(\vx_1)) \, \td \vx_1 = \sum_{i} \frac{f(\vx_i)}{\left| \nabla_{\vx_1} \, g(\vx_1) \cdot \vv(\vx_1) \right|_{\vx_1 = \vx_i}}, \hspace{5mm} \text{where} \hspace{5mm} g(\vx_i) = 0.
+\end{equation}
+In the current scenario 
+\begin{align}
+    g(\vx_1) &= t + \phi^P(\vxo)- \phi^P(\vx_1) \\
+    \nabla_{\vx_1} g(\vx_1) &= - \frac{1}{c}  \hat{\vk}^P(\vx_1) \\
+    f(\vx_1)  &= h_x(\vxo - \vx_1) \,  A(\vx_1)
+\end{align}
+For sake of simplicity it is assumed that a single zero position for the Dirac-argument exists, given where
+\begin{equation}
+     \phi^P(\vx_i) = t + \phi^P(\vxo)
+\end{equation}
+is satisfied. 
+The physical interpretation of this assumption is discussed later. 
+
+By denoting the time dependent zero-position as $\vx_i(t)$ the integral simplifies to 
+\begin{equation}
+    h_t(t, \vxo)  = \frac{A(\vx_i(t)) }{ A(\vxo) }  \,
+    \frac{c}{| \hat{k_\mathrm{v}}^P(\vx_i(t))  |} \,
+     h_x(\vxo - \vx_i(t))
+\end{equation}
+with $\hat{k_\mathrm{v}}^P$ denoting the tangential component of the normalized (time independent) local wavenumber vector
+
+\subsection{Linear SSD, plane wave}
+For a plane wave the phase function is given as
+\begin{equation}
+     \phi^P(\vx) = \frac{1}{c} (\hat{k_x} x + \hat{k_y} y),
+\end{equation}
+furthermore, let's assume a linear SSD with direction vector $\vv = [v_x, \, v_y]$, hence both $\vxo$ and $\vx_i$ satisfy
+\begin{align}
+    0 &= -v_y x_0 + v_x y_0 + c,\\
+    0 &= -v_y  x_i + v_x y_i + c,\\
+    0 &= -v_y (x_i-x_0) + v_x (y_i-y_0),\\
+    y_i-y_0 &= \frac{v_y}{v_x} (x_i-x_0)\\
+    x_i-x_0 &= \frac{v_x}{v_y} (y_i-y_0).
+\end{align}
+Hence, indeed, for a plane wave arriving at a linear SSD a single solution exists for the above system of equation as long as the plane wave does not arrive normally to the SSD (this latter case will be further examined later):
+For a given $\vxo$, position $\vx_i$ is found, where
+\begin{equation}
+    \hat{k_x} x_i + \hat{k_y} y_i = t c + \hat{k_x} x_0 + \hat{k_y} y_0
+\end{equation}
+\begin{equation}
+    \hat{k_x} (x_i-x_0) + \hat{k_y} (y_i-y_0) = t c
+\end{equation}
+
+\begin{equation}
+    x_i = x_0 + v_x\frac{t c}{\hat{k_x}v_x+ \hat{k_y} v_y } 
+\end{equation}
+\begin{equation}
+    y_i = y_0 + v_y\frac{t c}{\hat{k_x} v_x  + \hat{k_y}v_y} 
+\end{equation}
+It can be realized that $\hat{k_x} v_x  + \hat{k_y}v_y = \vv \cdot \hat{\vk^P} = \hat{k_v^P}$, i.e. by vector notation
+\begin{equation}
+    \vx_i = \vxo + \vv \frac{t c}{\hat{k_v^P}} 
+\end{equation}
+And the filter impulse response reads as
+\begin{equation}
+    h_t(t, \vxo)  = \frac{A( \vxo + \vv \frac{t c}{\hat{k_v^P}}) }{ A(\vxo) }  \,
+    \frac{c}{| \hat{k_\mathrm{v}}^P( \vxo + \vv \frac{t c}{\hat{k_v^P}})  |} \,
+     h_x(-\vv \frac{t c}{\hat{k_v^P}})
+\end{equation}
+In the followings the following assumptions are made:
+\begin{itemize}
+    \item it is assumed that the spatial filter impulse response is relatively short, and the amplitude factor of the driving function changes slowly in the proximity of $\vxo$, i.e.
+$A( \vxo + \vv \frac{t c}{\hat{k_v^P}}) \approx A(\vxo)$.
+    \item it is assumed that the incident field is locally plane at $\vxo$, i.e. again, in the proximity of $\vxo$ $\hat{k_\mathrm{v}}^P( \vxo + \vv \frac{t c}{\hat{k_v^P}}) \approx  \hat{k_\mathrm{v}}^P( \vxo)$ holds.
+\end{itemize}
+Similarly to standard WFS assumptions, the assumptions hold for SSD elements with small curvature and for virtual field with small local curvature (plane waves and far-field of point sources). 
+Finally it is exploited that usually the spatial filter impulse reponses are defined as the function of a single parameter, i.e. the vector notation in the function's argument is redunant.
+With all these considerations the connection between the spatial filter and the corresponding temporal filter at a single SSD element at $\vxo$ is given by 
+\begin{equation}
+    h_t(t, \vxo)  = \frac{c}{\left| \hat{k_\mathrm{v}^P}( \vxo ) \right| } \,
+     h_x(-t \frac{c}{\hat{k_v^P}(\vxo)}).
+\end{equation}
+Hence, the temporal impulse response is obtained by rescaling the spatial impulse response.
+
+\vspace{3mm}
+The above formulation allows the interconnection of the spatial filter transfer function with the corresponding temporal filter frequency characteristics as well.
+
+Assume that the transfer function of the spatial filter is given by $H_x(k_x)$.
+The corresponding temporal filter transfer is obtained simply from the scaling property of the Fourier transformed
+\begin{equation}
+    \frac{1}{2\pi}\int h_t(t, \vxo) \te^{-\ti \omega t} \td t  = \frac{c}{\left| \hat{k_\mathrm{v}^P}( \vxo ) \right| } \frac{1}{2\pi} \int 
+     h_x(-t \frac{c}{\hat{k_v^P}(\vxo)}) \te^{-\ti \omega t} \td t
+\end{equation}
+\begin{equation}
+ H_t(\omega, \vxo) =  H_x( -\omega\frac{\hat{k_v^P}(\vxo)}{c}) 
+\end{equation}
+
+
+\subsection{Alternative derivation: stationary position for the wavenumber domain driving functions}
+See: Firtha PhD, Appendix D.
+
+\subsection{Application example: antialiasing filtering}
+
+\end{document}
