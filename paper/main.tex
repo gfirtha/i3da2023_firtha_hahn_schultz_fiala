@@ -292,7 +292,80 @@ By denoting $\mathcal{F}\left( h_x(s)\right) = H_x(k_s)$ the corresponding trans
 where $k_t^P(s)$ is the tangential component of the local wavenumber vector, being a vector in a steady state sound field, pointing in the local propagation direction with the length being $\omega/c$ \cite{Firtha2019phd}.
 Hence, as the main result of the present discussion, the temporal filter transfer can be obtained from the wavenumber (modal) content of the spatial filter by simple rescaling in terms of the local wavenumber vector.
 
+The validity and the error analysis of the above filter transform was investigated in details in \cite{Firtha DAGA2023}.
+In the following the direct application for Local WFS is discussed. 
 
+\subsection{Application for Local Wave Field Synthesis}
+
+From Figure \ref{Fig:aliasing} (d) it is obvious, that the overlapping of the sampled driving function spectra, and, therefore, the presence of aliasing waves can be avoided by spatially bandlimiting the driving functions to the Nyquist wavenumber prior to sampling.
+Spatial bandlimitation can be easily performed by designing a suitable spatial antialiasing filter and transform it into an equivalent temporal filter bank, based on the results of the previous section.
+An important advantage of the above temporal filtering is that the driving functions may be evaluated in the discrete SSD positions, and a subsequent temporal antialiasing inherently ensure analytical spatial bandlimitation.
+
+The avoiding of the spectral overlapping can be achieved by bandlimiting the driving function to the sampling wavenumber $k_{s,\mathrm{s}} = \frac{2\pi}{\Delta s}$, with either simmatrically to $k_s = 0$ or choosing an arbitrary central wavenumber $k_{s,0}$.
+First the former case is investigated in details.
+
+\subsubsection{Symmetrical antialiasing}
+As the most simple antialiasing strategy, the spectral overlapping is avoided by the spatial lowpass filtering of the driving functions to the Nyquist wavenumber, $k_{s,\mathrm{Nyq}} = \frac{\pi}{\Delta s}$
+
+The effect of symmetrical bandlimitation is demonstrated via the exemplary low pass filter chosen to be an $N$-th order Butterworth design, defined in the wavenumber domain as
+\begin{equation}
+    H_x(k_s) = \frac{ 1 }{ \sqrt{ 1 + \left( k_s / k_{s,\mathrm{Nyq}} \right)^{2N} } }.
+\end{equation}
+
+From the transform given by \eqref{eq:frequency_transform} the angular frequency response of the equivalent temporal filter bank is given by
+\begin{equation}
+    H_t(s,\omega) = \frac{ 1 }{ \sqrt{ 1 + \left( \omega\frac{\hat{k}_t^P(s)}{c k_{s,\mathrm{Nyq}}}  \right)^{2N} } } =  \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{\omega_c}  \right)^{2N} } } .
+\end{equation}
+with 
+\begin{equation}
+    \omega_c = c \frac{k_{s,\mathrm{Nyq}}}{\hat{k}_t^P(s)} = c\frac{ \pi}{\Delta s} \frac{1}{\hat{k}_t^P(s)}.
+    \label{eq:cutoff_fr}
+\end{equation}
+Therefore, the cut-off frequency of the equivalent low-pass filter on a given SSD element is directly determined by the tangential component of the local propagation vector.
+
+The result of antialiasing filtering is depicted in Figure \ref{Fig:symm_antialiasing} for the synthesis scenario discussed in the foregoing.
+Figure (a) shows the result of the synthesis, while Figure (b) illustrates the spectrum of the bandlimited, sampled driving functions.
+\begin{figure}[h!]
+    \begin{center}
+    \begin{overpic}[width = 0.75\columnwidth]{figs/antialiased_synthesis.png}
+        \footnotesize \put(0,2){(a)}
+    \end{overpic} 
+    \\
+    \begin{overpic}[width = 0.75\columnwidth]{figs/antialiased_synthesis_spectrum.png}
+        \footnotesize \put(0,0){(b)}
+    \end{overpic}
+\end{center}
+    \caption{Symmetric antialiasing filtering}
+\label{Fig:symm_antialiasing}
+\end{figure}
+It is highlighted, that
+
+It should be noted that the presented spatial-to-temporal filter transform strategy can be also interpreted as a frequency dependent spatial windowing approach:
+in the aspect of antialiasing filtering SSD positions where the local wanumber vector is higher than the Nyquist wanumber are highly attenuated, with the window width decreasing with increasing angular frequency.
+\begin{figure}[]
+\begin{overpic}[width = 1\columnwidth]{figs/equivalent_windows.png}
+\end{overpic} 
+\caption{Illustration of equivalent frequency dependent window functions}
+\label{Fig:equivalent_windows}
+\end{figure}
+The actual shape of the spatial windows are given by the wavenumber spectrum of the spatial lowpass filter $H_x(k_s)$, rescaled in terms of the local wavenumber vector.
+The set of window functions applied in the present simulation scenario are illustrated in Figure \ref{Fig:equivalent_windows}.
+
+\subsubsection{Non-symmetrical antialiasing}
+
+\begin{figure}[h!]
+    \begin{center}
+    \begin{overpic}[width = 0.75\columnwidth]{figs/antialiased_synthesis_steered.png}
+        \footnotesize \put(0,2){(a)}
+    \end{overpic} 
+    \\
+    \begin{overpic}[width = 0.75\columnwidth]{figs/antialiased_synthesis_spectrum_steered.png}
+        \footnotesize \put(0,0){(b)}
+    \end{overpic}
+\end{center}
+    \caption{Non-symmetric antialiasing filtering}
+\label{Fig:symm_antialiasing}
+\end{figure}
 \section*{Acknowledgment}
 
 This work was supported by the János Bolyai Research Scholarship of the Hungarian Academy of Sciences, the ÚNKP-22-5-BME-318 New National Excellence Program of the Ministry for Innovation and Technology from the source of the National Research, Development and Innovation Fund
