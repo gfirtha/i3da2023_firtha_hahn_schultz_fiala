@@ -338,7 +338,16 @@ Figure (a) shows the result of the synthesis, while Figure (b) illustrates the s
     \caption{Symmetric antialiasing filtering}
 \label{Fig:symm_antialiasing}
 \end{figure}
-It is highlighted, that
+It is highlighted, that the presented antialiasing strategy ensures highly suppressed aliasing waves in the center of the circular source array.
+In other positions of the listening area lateral aliasing wavefronts remain in the reproduced wave field, while the target, virtual wave front is bandlimited.
+This phenomena can be easily understood by investigating the synthesis scenario in a geometrical manner:
+
+From \eqref{eq:cutoff_fr} it is clear that since the antialiasing filter cutoff frequency is proportional with the tangential component of the virtual field on the SSD, therefore, in a circualr array a single SSD element will have nearly fullband driving signal: that SSD element at which the wavefront arrives perpendicularly.
+This fullband SSD element is marked with white dot in Figure \ref{Fig:symm_antialiasing} (a).
+From general WFS theory it is known that the fullband SSD element will dominate the synthesized wavefront (i.e. will serve as a stationary SSD position) for spatial positions along a straight line crossing through the actual SSD element into the direction of the local propagation vector.
+Therefore, the present antialiasing strategy ensures aliasing-free synthesis along a straight line for which the fullband SSD element is the stationary secondary source. 
+The direction of the line of aliasing-free synthesis is marked with a dashed arrow in the figure.
+This is in contrast with conventional Local WFS approaches, in which the synthesis is optimized in the proximity of a pre-defined reference position over a circular area.
 
 It should be noted that the presented spatial-to-temporal filter transform strategy can be also interpreted as a frequency dependent spatial windowing approach:
 in the aspect of antialiasing filtering SSD positions where the local wanumber vector is higher than the Nyquist wanumber are highly attenuated, with the window width decreasing with increasing angular frequency.
@@ -366,6 +375,10 @@ The set of window functions applied in the present simulation scenario are illus
     \caption{Non-symmetric antialiasing filtering}
 \label{Fig:symm_antialiasing}
 \end{figure}
+
+
+It is important to emphasize that if no actual SSD element exists for a given plane wave direction (for which the wave arrives perpendicularly) then all the SSD elements are bandlimited, i.e. 
+
 \section*{Acknowledgment}
 
 This work was supported by the János Bolyai Research Scholarship of the Hungarian Academy of Sciences, the ÚNKP-22-5-BME-318 New National Excellence Program of the Ministry for Innovation and Technology from the source of the National Research, Development and Innovation Fund
