@@ -314,11 +314,11 @@ The effect of symmetrical bandlimitation is demonstrated via the exemplary low p
 
 From the transform given by \eqref{eq:frequency_transform} the angular frequency response of the equivalent temporal filter bank is given by
 \begin{equation}
-    H_t(s,\omega) = \frac{ 1 }{ \sqrt{ 1 + \left( \omega\frac{\hat{k}_t^P(s)}{c k_{s,\mathrm{Nyq}}}  \right)^{2N} } } =  \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{\omega_c}  \right)^{2N} } } .
+    H_t(s,\omega) = \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{c}\frac{\hat{k}_t^P(s)}{k_{s,\mathrm{Nyq}}}  \right)^{2N} } } =  \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{\omega_c(s)}  \right)^{2N} } } .
 \end{equation}
 with 
 \begin{equation}
-    \omega_c = c \frac{k_{s,\mathrm{Nyq}}}{\hat{k}_t^P(s)} = c\frac{ \pi}{\Delta s} \frac{1}{\hat{k}_t^P(s)}.
+    \omega_c(s) = c \frac{k_{s,\mathrm{Nyq}}}{\hat{k}_t^P(s)} = c\frac{ \pi}{\Delta s} \frac{1}{\hat{k}_t^P(s)}.
     \label{eq:cutoff_fr}
 \end{equation}
 Therefore, the cut-off frequency of the equivalent low-pass filter on a given SSD element is directly determined by the tangential component of the local propagation vector.
@@ -361,6 +361,21 @@ The actual shape of the spatial windows are given by the wavenumber spectrum of 
 The set of window functions applied in the present simulation scenario are illustrated in Figure \ref{Fig:equivalent_windows}.
 
 \subsubsection{Non-symmetrical antialiasing}
+As an alternative antialiasing strategy, the overlapping of the spectra can be avoided by bandlimiting the driving function spectra with a spatial pass-band filter with an arbitrary center wavenumber $k_{s,0}$ and the bandwidth of the sampling wavenumber $k_{s,\mathrm{s}} = k_{s,\mathrm{Nyq}}$.
+
+Again, the concept is illustrated via a simple synthesis scenraio as discussed in the foregoing.
+In the present case the spatial bandpass filter is derived by shifting the $N$-th order low-pass Butterworth design to the center wavenumber $k_{s,0}$
+\begin{equation}
+    H_x(k_s) = \frac{ 1 }{ \sqrt{ 1 + \left( \frac{k_s-k_{s,0}}{k_{s,\mathrm{Nyq}} }\right)^{2N} } }.
+\end{equation}
+Again, an equivalent filter bank is derived by using the transform \eqref{eq:frequency_transform}, resulting in the frequency response of 
+\begin{equation}
+    H_t(s,\omega) = \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{c}\frac{\hat{k}_t^P(s) - k_{s,0}}{k_{s,\mathrm{Nyq}}}  \right)^{2N} } } =  \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{\omega_c(s)}  \right)^{2N} } } .
+\end{equation}
+with 
+\begin{equation}
+    \omega_c(s) = c \frac{k_{s,\mathrm{Nyq}}}{\hat{k}_t^P(s)- k_{s,0}} = c\frac{ \pi}{\Delta s} \frac{1}{\hat{k}_t^P(s)- k_{s,0}}.
+\end{equation}
 
 \begin{figure}[h!]
     \begin{center}
