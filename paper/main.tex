@@ -364,17 +364,21 @@ The set of window functions applied in the present simulation scenario are illus
 As an alternative antialiasing strategy, the overlapping of the spectra can be avoided by bandlimiting the driving function spectra with a spatial pass-band filter with an arbitrary center wavenumber $k_{s,0}$ and the bandwidth of the sampling wavenumber $k_{s,\mathrm{s}} = k_{s,\mathrm{Nyq}}$.
 
 Again, the concept is illustrated via a simple synthesis scenraio as discussed in the foregoing.
-In the present case the spatial bandpass filter is derived by shifting the $N$-th order low-pass Butterworth design to the center wavenumber $k_{s,0}$
+In the present case the spatial bandpass filter is derived by shifting the $N$-th order low-pass Butterworth design to the a frequency dependent center wavenumber $k_{s,0}(\omega) = \frac{\omega}{c} \hat{k}_{s,0}$ (where $\hat{k}_{s,0}$ is a constant normalized wavenumber value)
 \begin{equation}
-    H_x(k_s) = \frac{ 1 }{ \sqrt{ 1 + \left( \frac{k_s-k_{s,0}}{k_{s,\mathrm{Nyq}} }\right)^{2N} } }.
+    H_x(k_s, \omega) = \frac{ 1 }{ \sqrt{ 1 + \left( \frac{k_s-k_{s,0}(\omega)}{k_{s,\mathrm{Nyq}} }\right)^{2N} } }.
 \end{equation}
+Note, that in this case even the spatial filters are frequency dependent.
+This seemingly pointless assumption ensures later that the transformed temporal filters remain time-invariant.
+
 Again, an equivalent filter bank is derived by using the transform \eqref{eq:frequency_transform}, resulting in the frequency response of 
 \begin{equation}
-    H_t(s,\omega) = \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{c}\frac{\hat{k}_t^P(s) - k_{s,0}}{k_{s,\mathrm{Nyq}}}  \right)^{2N} } } =  \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{\omega_c(s)}  \right)^{2N} } } .
+    H_t(s,\omega) = \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{c}\frac{\hat{k}_t^P(s) - \hat{k}_{s,0}}{k_{s,\mathrm{Nyq}}}  \right)^{2N} } } =  \frac{ 1 }{ \sqrt{ 1 + \left( \frac{\omega}{\omega_c(s)}  \right)^{2N} } } .
 \end{equation}
-with 
+where $\hat{k}_{s,0}$ is the normalized center wavenumber and with
 \begin{equation}
-    \omega_c(s) = c \frac{k_{s,\mathrm{Nyq}}}{\hat{k}_t^P(s)- k_{s,0}} = c\frac{ \pi}{\Delta s} \frac{1}{\hat{k}_t^P(s)- k_{s,0}}.
+    \omega_c(s) = c \frac{k_{s,\mathrm{Nyq}}}{\hat{k}_t^P(s) - \hat{k}_{s,0}} = c\frac{ \pi}{\Delta s} \frac{1}{\hat{k}_t^P(s) - \hat{k}_{s,0}}.
+    \label{eq:cutoff_asymm}
 \end{equation}
 
 \begin{figure}[h!]
@@ -388,11 +392,46 @@ with
     \end{overpic}
 \end{center}
     \caption{Non-symmetric antialiasing filtering}
-\label{Fig:symm_antialiasing}
+\label{Fig:assymm_antialiasing}
 \end{figure}
+The application of the above formulation with an arbitrarily chosen center wavenumber $\hat{k}_{s,0} = 0.5$ is depicted in Figure \ref{Fig:assymm_antialiasing}.
+Note that the wavenumber content of the original spatial lowpass filter is ,,steered'', so that the center frequency varies linearly with the angular freuquency and the slope of the variation is given by the normalized center wavenumber.
+Obviously, this ,,steered'', frequency dependent band-pass filter theoretically also ensures non-overlapping spectra after the discretization process.
+
+From \eqref{eq:cutoff_asymm} it is apparent that in the present case the nearly fullband SSD element will be that, where the tangential local propagation vector coincides with the normalized center wavenumber, i.e. where $\hat{k}_t^P(s) = \hat{k}_{s,0} = 0.5$.
+Again, the fullband SSD element is denoted by white dot in Figure \ref{Fig:assymm_antialiasing} (a).
+Similarly to the previous case, this fullband SSD element serves as the stationary SSD position for a set of positions located along a straight line passing through the SSD element with the direction given by this element's local propagation vector.
+The direction along which fullband synthesis is ensured is denoted by dashed arrow in Figure \ref{Fig:assymm_antialiasing} (a).
 
 
-It is important to emphasize that if no actual SSD element exists for a given plane wave direction (for which the wave arrives perpendicularly) then all the SSD elements are bandlimited, i.e. 
+It is important to emphasize that if no actual SSD element exists for a given plane wave direction (for which the wave arrives perpendicularly) then all the SSD elements are bandlimited, i.e. in the synthesized field no fullband synthesis positions will be present.
+Therefore, for a given receiver position the bandwidth of the reproduced field will depend on the virtual source position/virtual plane wave direction and the loudspeaker spacing.
+This phenomena will have a clearly audible effect in case of dynamic WFS scenarios (e.g. moving virtual sources) and the possibilities to overcome this limitation is the topic of future research.
+
+\subsubsection{Application for Local Wave Field Synthesis}
+The findings of the previous subsections can be straightforwardly used in order to apply the above theory directly for Local Wave Field Synthesis.
+In this case a reference position $\vxref$ is prescribed inside the SSD, at which aliasing-free, amplitude and phase correct synthesis has to be ensured.
+
+Amplitude correct synthesis may be achieved by a suitably chosen reference function in \eqref{Eq:WFS25D}, based on the virtual field model.
+For a detailed treatise on the definition of the reference function the reader is referred to \cite{Firtha2019phd}.
+
+On the other hand, aliasing components can be suppressed by ,,steering'' the direction of antialiased synthesis to cross the prescribed reference point.
+This can be performed by finding the stationary position on the SSD for the reference position and choosing the normalized center wavenumber in \eqref{eq:cutoff_asymm} to coincide with the local propagation vector of the stationary position.
+Mathematically, this can be formulated as follows.
+Given a reference position $\vxref$ and an SSD located along $\vxo$, the stationary SSD element $\vxo^*$ satisfies
+\begin{equation}
+    \frac{\vxref - \vxo^*}{\left| \vxref - \vxo^* \right|} = \hat{\vk}^P(\vxo^*).
+\end{equation}
+Once $\vxo^*$ is found, that center wavenumber in \eqref{eq:cutoff_asymm} is found by
+\begin{equation}
+    \hat{k}_{s,0} = \hat{k}_t^P(\vxo^*).
+\end{equation}
+
+Obviously, symmetrical antialiasing filtering, depicted in Figure \ref{Fig:symm_antialiasing} can be regarded as LWFS with choosing $\vxref = [0, \, 0]^{\mathrm{T}}$,
+while Figure \ref{Fig:assymm_antialiasing}, illustrating asymmetrical filtering was generated by choosing $\vxref = [0, \, 1]^{\mathrm{T}}$.
+In both cases in Figure \ref{Fig:symm_antialiasing} and \ref{Fig:assymm_antialiasing} (a) the reference position is denoted by black cross.
+
+\section{Comparison with direct modal bandlimitation}
 
 \section*{Acknowledgment}
 
