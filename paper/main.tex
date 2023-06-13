@@ -167,7 +167,7 @@ In the current example the SSD is a circular one with the radius of $R_0 = 2~\ma
 The aliased synthesis in the temporal domain is depicted in Figure \ref{Fig:aliasing} (b).
 
 Mathematically, aliasing can be modeled as the discretization of the theoretically continuous driving functions:
-Assume that a suitable parametrization $d(s,t)$ of the secondary source is given, e.g. the arc length $s = R\, \cos \phi$ in case of a circular SSD (where $\phi$ is the polar angle), or the linear position on an infinite long linear SSD.
+Assume that a suitable parametrization $d(s,t)$ of the secondary source is given, e.g. the arc length $s = R_0\, \cos \phi$ in case of a circular SSD (where $\phi$ is the polar angle), or the linear position on an infinite long linear SSD.
 The discretization process is given by sampling the driving function by a sampling function, consisting of a series of Dirac-deltas in the actual secondary source positions:
 \begin{equation}
     d_s(s,t) = \sum_{\nu = 0}^{N_0} d(s,t) \, \delta(s - \nu \Delta s),
@@ -370,7 +370,7 @@ The actual shape of the spatial windows are given by the wavenumber spectrum of 
 The set of window functions applied in the present simulation scenario are illustrated in Figure \ref{Fig:equivalent_windows}.
 
 \subsubsection{Non-symmetrical antialiasing}
-As an alternative antialiasing strategy, the overlapping of the spectra can be avoided by bandlimiting the driving function spectra with a spatial band-pass filter with an arbitrary center wavenumber $k_{s,0}$ and the bandwidth of the sampling wavenumber $k_{s,\mathrm{s}} = k_{s,\mathrm{Nyq}}$.
+As an alternative antialiasing strategy, the overlapping of the spectra can be avoided by bandlimiting the driving function spectra with a spatial band-pass filter with an arbitrary center wavenumber $k_{s,0}$ and the bandwidth of the sampling wavenumber $k_{s,\mathrm{s}} = 2 k_{s,\mathrm{Nyq}}$.
 
 Again, the concept is illustrated via a simple synthesis scenario as discussed in the foregoing.
 In the present case the spatial bandpass filter is derived by shifting the $N$-th order low-pass Butterworth design to the a frequency dependent center wavenumber $k_{s,0}(\omega) = \frac{\omega}{c} \hat{k}_{s,0}$ (where $\hat{k}_{s,0}$ is a constant normalized wavenumber value)
@@ -442,6 +442,9 @@ while Figure \ref{Fig:assymm_antialiasing}, illustrating asymmetrical filtering 
 In both cases in Figure \ref{Fig:symm_antialiasing} and \ref{Fig:assymm_antialiasing} (a) the reference position is denoted by a black cross.
 
 \section{Comparison with direct modal bandlimitation}
+Finally, the performance of the proposed Local Wave Field Synthesis approach is compared with conventional LWFS implementations, based on direct modal bandlimitation.
+
+{\color{red} A paragraph from Nara should come here about (Fiete's? and) his LWFS approaches}
 
 
 \section{Conclusion}
@@ -454,7 +457,5 @@ and by the OTKA PD-143129 and OTKA K-143436 grants.
 \bibliographystyle{unsrt}
 \bibliography{dissertation}
 \vspace{12pt}
-\color{red}
-IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
 
 \end{document}
