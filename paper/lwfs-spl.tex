@@ -1,0 +1,19 @@
+\ldots
+For a direct spatial band-limitation,
+the sound field is expanded in terms of cylindrical harmonics with respect to the target position.
+The modal bandwidth was limited by truncating the expansion to a finite order.
+Based on the analytical expressions of the modal impulse responses,
+the LWFS driving functions are implemented as FIR filters in the time domain.
+The length of the FIR filters depends on the distance between the secondary source and the target position,
+ranging between 273 and 787 taps for the considered scenarios
+(excluding the WFS pre-filter).
+%
+Since this approach is based on time-domain sampling,
+the resulting filters exhibit temporal aliasing artifacts,
+degrading the accuracy in the frequency domain.
+It is, therefore, crucial to attenuate the spectral components beyond the Nyquist limit
+before the modal impulse responses are sampled.
+An analytical anti-aliasing filtering is performed in the continuous-time domain
+by using the 15th-order Lagrange interpolation kernel.
+%
+Interested readers are referred to \cite{hahn2022cylindrical} for further detail.
