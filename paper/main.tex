@@ -182,13 +182,13 @@ By investigating the sampling process in the frequency-wavenumber domain, the sp
     \label{eq:sampling_fd}
 \end{equation}
 where $t \rightarrow \omega$ and $s \rightarrow k_s$ are Fourier-transform pairs.
-Obviously, for a closed SSD contour the continuous spatial Fourier-transform yields a discrete spectrum, consisting of non-zero components only on the multiples of the spatial period length, i.e. at
+Obviously, for a closed SSD contour the continuous spatial Fourier-transform yields a discrete spectrum, consisting of non-zero components only on the multiples of the spatial wavenumber, i.e. at
 \begin{equation}
-    k_s = m \frac{ 2 \pi }{R_0},
+    k_s = \frac{m}{R_0},
 \end{equation}
 constituting a Fourier series.
 
-In the followings the spatial spectrum refers to the distribution of the non-zero spectral/wavenumber values, and the corresponding wavenumber refers to the spatial frequency of the harmonic basis functions, measured along the closed curve.
+In the followings the spatial spectrum refers to the distribution of the non-zero wavenumber values, and the corresponding wavenumber refers to the spatial frequency of the harmonic basis functions, measured along the closed curve.
 Figure \ref{Fig:aliasing} (c) and (d) illustrate the quasi-continuous and the sampled driving function's spectra.
 
 From \eqref{eq:sampling_fd} it can be concluded that due to spatial sampling, the wavenumber content of the driving function is repeated on the multiples of the sampling wavenumber $k_{s, \mathrm{s}} = \frac{2\pi}{\Delta s}$.
@@ -202,7 +202,7 @@ However, the modal bandlimitation solution is available only for plane wave and 
 In the following an alternative, approximate solution is presented, allowing spatial antialiasing filtering for an arbitrary virtual source model and arbitrary SSD contour, performed by FIR filtering in the temporal domain.
 The technique relies on an analytic transform of spatially defined antialiasing filters to an equivalent temporal domain filter bank.
 
-\section{Time domain antialiasing filter design}
+\section{Time domain antialiasing filter}
 
 \subsection{Spatial to temporal filter transform}
 First, a general transformation is introduced allowing the transform of an arbitrary spatial filter to an equivalent temporal filter set.
@@ -211,7 +211,7 @@ Assume an arbitrary filter impulse response defined in the spatial domain, denot
 Again, $s$ is a suitable parametrization of the SSD contour.
 The spatially filtered driving function is obtained from the convolution of the conventional driving functions and the filter impulse response along the SSD contour
 \begin{equation}
-    d'_x(s,t) = h_x(s) \ast_x d(s,t) = \int h_x(s-s_0) \, d(s_0,t) \, \td s_0,
+    d'_x(s,t) = h_x(s) \ast_s d(s,t) = \int h_x(s-s_0) \, d(s_0,t) \, \td s_0,
     \label{eq:spatial_conv}
 \end{equation}
 where $\ast_x$ denotes a circular convolution for a convex SSD contour or a linear convolution in case of an infinite long linear SSD.
@@ -235,16 +235,16 @@ Again, in the following the pre-equalization filter is omitted from discussion, 
 
 The temporal convolution in \eqref{eq:temp_conv} can be evaluated by substituting the general WFS driving function \eqref{eq:d_wfs_td} and exploiting the sifting property of the Dirac-delta, yielding
 \begin{align}
-    d'_t(s,t) = A^D(s) \, h_t \!\left(s,t- \phi^P(s) \right) \\
-    d'_t(s,t + \phi^P(s) ) = A^D(s) \, h_t \!\left(s,t\right).
+    d'_t(s,t) = A^D(s) \, h_t \!\left(s,t- \tau(s) \right) \\
+    d'_t(s,t + \tau(s) ) = A^D(s) \, h_t \!\left(s,t\right).
     \label{eq:temp_conv_eval}
 \end{align}
-In the second equation the time shift of $\phi^P(s)$ was applied for the sake of simplicity.
+In the second equation the time shift of $\tau(s)$ was applied for the sake of simplicity.
 
 The shifted spatially filtered driving function reads as
 \begin{multline}
-    d'_x(s,t+ \phi^P(s) ) = \int h_x(s-s_0) \, d(s_0,t+ \phi^P(s) ) \, \td s_0 = \\
-    \int h_x(s-s_0) \, A^D(s_0)\, \delta(s_0,t+ \left(\phi^P(s)-\phi^P(s_0)\right)  ) \, \td s_0.
+    d'_x(s,t+ \tau(s) ) = \int h_x(s-s_0) \, d(s_0,t+ \tau(s) ) \, \td s_0 = \\
+    \int h_x(s-s_0) \, A^D(s_0)\, \delta(s_0,t+ \left(\tau(s)-\tau(s_0)\right)  ) \, \td s_0.
     \label{eq:spat_conv2}
 \end{multline}
 In order to evaluate the spatial convolution the generalized sifting property of the Dirac-delta may be applied \cite{Firtha2019phd}, which states that
@@ -253,7 +253,7 @@ In order to evaluate the spatial convolution the generalized sifting property of
 \end{equation}
 In the present problem the zeros of the Dirac's argument are found where
 \begin{equation}
-    \phi^P(s_i) = t + \phi^P(s)
+    \tau(s_i) = t + \tau(s)
     \label{eq:zero}
 \end{equation}
 is satisfied.
@@ -261,12 +261,12 @@ In the following it is assumed that a single zero $s_i$ exists, satisfying \eqre
 This assumption means that the wavefront arrives at each SSD element at a unique time instant, being strictly true for a virtual plane wave and a linear SSD.
 The derivative of the phase function is given by
 \begin{equation}
-    \frac{\partial}{\partial s_0} g(s_0) = - \frac{\partial}{\partial s_0} \phi^P(s_0) = -\frac{\hat{k}_t^P(s_0)}{c},
+    \frac{\partial}{\partial s_0} g(s_0) = - \frac{\partial}{\partial s_0} \tau(s_0) = -\frac{\hat{k}_t^P(s_0)}{c},
 \end{equation}
 i.e. it is the tangential component of the local propagation vector.
 With the above assumptions the integral \eqref{eq:spat_conv2} can be evaluated, yielding
 \begin{equation}
-    d'_x(s,t+ \phi^P(s) ) = h_x(s-s_i) \, A^D(s_i)
+    d'_x(s,t+ \tau(s) ) = h_x(s-s_i) \, A^D(s_i)
     .
     \label{eq:spat_conv_eval}
 \end{equation}
@@ -284,7 +284,7 @@ As a further general WFS assumption it is supposed that the SSD is locally plane
 These requirements inherently ensure that a single solution exists for \eqref{eq:zero}\footnote{Except for a plane wave arriving normally to the SSD, at which case the temporal filter is transformed into a Dirac-delta.}.
 With these assumptions the phase function is given as
 \begin{equation}
-    \phi^P(\vx) = \hat{k}^P_x(\vx)x +  \hat{k}^P_y(\vx) y
+    \tau(\vx) = \hat{k}^P_x(\vx)x +  \hat{k}^P_y(\vx) y
 \end{equation}
 and \eqref{eq:zero} is satisfied where
 \begin{equation}
@@ -310,7 +310,7 @@ Hence, as the main result of the present discussion, the temporal filter transfe
 The validity and the error analysis of the above filter transform was investigated in details in \cite{Firtha DAGA2023}.
 In the following the direct application for Local WFS is discussed.
 
-\subsection{Application for Local Wave Field Synthesis}
+\subsection{Application for antialiasing filtering}
 
 From Figure \ref{Fig:aliasing} (d) it is obvious, that the overlapping of the sampled driving function spectra, and, therefore, the presence of aliasing waves can be avoided by spatially bandlimiting the driving functions to the Nyquist wavenumber prior to sampling.
 Spatial bandlimitation can be easily performed by designing a suitable spatial antialiasing filter and transforming it into an equivalent temporal filter bank, based on the results of the previous section.
@@ -339,6 +339,11 @@ with
 Therefore, the cut-off frequency of the equivalent low-pass filter on a given SSD element is directly determined by the tangential component of the local propagation vector.
 
 The result of antialiasing filtering is depicted in Figure \ref{Fig:symm_antialiasing} for the synthesis scenario discussed in the foregoing.
+In the present case the sampling arc length is given by $\Delta s = \frac{2 \pi R_0}{N}$, i.e. the space-dependent cut-off frequency reads as\begin{equation}
+    \omega_c(s) = \frac{ N}{ 2 R_0 } \frac{c}{\hat{k}_t^P(s)}.
+\end{equation}
+The antialiasing filters were a 4-th order Butterworth deisgn.
+
 Figure (a) shows the result of the synthesis, while Figure (b) illustrates the spectrum of the bandlimited, sampled driving functions.
 \begin{figure}[h!]
     \begin{center}
