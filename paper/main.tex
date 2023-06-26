@@ -1,6 +1,7 @@
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage[english]{babel}          % für deutsche Dokumente
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
@@ -73,26 +74,26 @@ Consider an arbitrary steady-state free space sound field at an angular frequenc
 As a standard ansatz in the field of geometrical acoustics the sound field can be written in the general polar from as
 %
 \begin{equation}
-    P(\vx,\omega) = A^P(\vx) \te^{- \ti \omega \phi^P(\vx)},
+    P(\vx,\omega) = A(\vx) \te^{- \ti \omega \tau(\vx)},
     \label{eq:Pxw}
 \end{equation}
 %
-where $A^P(\vx)$ and $\phi^P(\vx)$ are real-valued functions.
+where $A(\vx)$ and $\tau(\vx)$ are real-valued functions.
 This formulation applies to both plane waves and (3D) point sources.
-The propagation dynamics of the sound field are governed by its phase function $\phi^P(\vx)$, termed as the eikonal in the field of ray acoustics.
+The propagation dynamics of the sound field are governed by its phase function $\tau(\vx)$, termed as the eikonal in the field of ray acoustics.
 In the temporal domain, the sound field can be obtained by taking the inverse Fourier transform of \eqref{eq:Pxw}, yielding:
 \begin{equation}
-    p(\vx,t) = A^P(\vx) \, \delta \! \left( t - \phi^P(\vx)\right).
+    p(\vx,t) = A(\vx) \, \delta \! \left( t - \tau(\vx)\right).
 \end{equation}
-From the above formulation it is evident that the eikonal $\phi^P(\vx)$ describes the propagation delay the wavefront takes to arrive at $\vx$.
+From the above formulation it is evident that the eikonal $\tau(\vx)$ describes the propagation delay the wavefront takes to arrive at $\vx$.
 The eikonal equation is obtained by substituting the ansatz \eqref{eq:Pxw} into the Helmholtz equation, stating that in a source free volume
 \begin{equation}
-    \left| \nabla \phi^P(\vx) \right| = \frac{1}{c}
+    \left| \nabla \tau(\vx) \right| = \frac{1}{c}
 \end{equation}
 is fulfilled.
 The gradient of the eikonal is termed as the local propagation vector
 \begin{equation}
-    \hat{\vk}^P(\vx) = \posvec{3}{\hat{k}_x^P(\vx)}{\hat{k}_y^P(\vx)}{\hat{k}_z^P(\vx)} = c \nabla_{\! \vx} \phi^P(\vx,\omega).
+    \hat{\vk}^P(\vx) = \posvec{3}{\hat{k}_x^P(\vx)}{\hat{k}_y^P(\vx)}{\hat{k}_z^P(\vx)} = c \nabla \tau(\vx,\omega).
 \end{equation}
 In steady-state, the local propagation vector is perpendicular to the wavefront (equiphase positions) at an arbitrary location with unit length pointing towards the local propagation direction \cite{Firtha2016}.
 In the temporal domain it points into the local propagation direction at the time instant of the wavefront passby.
@@ -124,12 +125,12 @@ The driving function consists of
 Assuming a simple virtual sound field as given by \eqref{eq:Pxw} the driving functions can be written as
 \begin{equation}
     D(\vxo,\omega) = H_{\text{pre}}(\omega)
-    \underbrace{ w(\vxo)  \, \sqrt{d_{\mathrm{ref}}(\vxo)} \, A^P(\vxo) }_{A^D(\vxo)} \te^{- \ti \omega \phi^P(\vxo)}
+    \underbrace{ w(\vxo)  \, \sqrt{d_{\mathrm{ref}}(\vxo)} \, A(\vxo) }_{A^D(\vxo)} \te^{- \ti \omega \tau(\vxo)}
     ,
 \end{equation}
 and in the time domain as
 \begin{equation}
-    d(\vxo,t) = h_{\text{pre}}(t) \ast_t  A^D(\vxo)\,  \delta\left( t - \phi^P(\vxo)\right),
+    d(\vxo,t) = h_{\text{pre}}(t) \ast_t  A^D(\vxo)\,  \delta\left( t - \tau(\vxo)\right),
     \label{eq:d_wfs_td}
 \end{equation}
 with $A^D(\vxo)$ being the real valued overall gain factor of the driving function, $\ast_t$ denoting temporal convolution and $h_{\text{pre}}(t)$ is the temporal WFS prefilter impulse response.
@@ -160,7 +161,7 @@ In the following due to the associativity of convolution this prefiltering is ex
 Conventional WFS theory assumes a continuous secondary source distribution.
 In practical applications the SSD is composed of evenly spaced discrete source elements.
 As a result, \emph{aliasing wavefronts} emerge from the individual secondary sources, following the intended virtual wavefront, leading to a \emph{spatial aliasing phenomena}.
-Aliasing is perceived as strong coloration predominantly in the high-frequency region varying with the receiver position and the virtual source position/direction, occurring predominantly above the \emph{aliasing frequency}.
+Although localization does not degrade due to the precedence effect, aliasing is perceived as strong coloration predominantly in the high-frequency region varying with the receiver position and the virtual source position/direction, occurring predominantly above the \emph{aliasing frequency}.
 
 Figure \ref{Fig:aliasing} illustrates spatial aliasing in the temporal domain through the example of the synthesis of an impulsive plane wave, arriving from $\phi_{\mathrm{PW}} = 0^{\circ}$, applying a discrete secondary source distribution in comparement with a quasi-continuous synthesis scenario.
 In the current example the SSD is a circular one with the radius of $R_0 = 2~\mathrm{m}$, consisting of $N_0 = 90$ 3D point sources.
@@ -170,18 +171,23 @@ Mathematically, aliasing can be modeled as the discretization of the theoretical
 Assume that a suitable parametrization $d(s,t)$ of the secondary source is given, e.g. the arc length $s = R_0\, \cos \phi$ in case of a circular SSD (where $\phi$ is the polar angle), or the linear position on an infinite long linear SSD.
 The discretization process is given by sampling the driving function by a sampling function, consisting of a series of Dirac-deltas in the actual secondary source positions:
 \begin{equation}
-    d_s(s,t) = \sum_{\nu = 0}^{N_0} d(s,t) \, \delta(s - \nu \Delta s),
+    d_s(s,t) = \sum_{\nu = 0}^{N_0} d(s,t) \, \delta(s - \nu \Delta s) \, \Delta s,
     \label{eq:sampling_td}
 \end{equation}
 where $\Delta s$ is the sampling arc length.
 
 By investigating the sampling process in the frequency-wavenumber domain, the spectrum of the sampled driving function is given by
 \begin{equation}
-    \tilde{D}_s(k_s,\omega) = \sum_{\nu = -\infty}^{\infty} \tilde{D}\left(k_s- \nu \frac{2\pi}{\Delta s},\omega\right),
+    \tilde{D}_s(k_s,\omega) = \sum_{\nu = -\infty}^{\infty} \tilde{D}\left(k_s- \nu \frac{2\pi}{\Delta s},\omega\right) \Delta s,
     \label{eq:sampling_fd}
 \end{equation}
 where $t \rightarrow \omega$ and $s \rightarrow k_s$ are Fourier-transform pairs.
-Obviously, for a closed SSD contour the spatial Fourier-transform yields a discrete spectrum, consisting of non-zero components only on the multiples of $\frac{1}{R_0}$ (i.e. a Fourier series).
+Obviously, for a closed SSD contour the continuous spatial Fourier-transform yields a discrete spectrum, consisting of non-zero components only on the multiples of the spatial period length, i.e. at
+\begin{equation}
+    k_s = m \frac{ 2 \pi }{R_0},
+\end{equation}
+constituting a Fourier series.
+
 In the followings the spatial spectrum refers to the distribution of the non-zero spectral/wavenumber values, and the corresponding wavenumber refers to the spatial frequency of the harmonic basis functions, measured along the closed curve.
 Figure \ref{Fig:aliasing} (c) and (d) illustrate the quasi-continuous and the sampled driving function's spectra.
 
