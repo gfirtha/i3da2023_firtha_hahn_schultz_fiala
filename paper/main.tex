@@ -263,7 +263,7 @@ The shifted spatially filtered driving function reads as
     \int h_x(s-s_0) \, A^D(s_0)\, \delta(s_0,t+ \left(\tau(s)-\tau(s_0)\right)  ) \, \td s_0.
     \label{eq:spat_conv2}
 \end{multline}
-In order to evaluate the spatial convolution the generalized sifting property of the Dirac-delta may be applied \cite{Firtha2019phd}, which states that
+In order to evaluate the spatial convolution the generalized sifting property of the Dirac-delta may be applied \cite{Firtha2019phd, Jackson1999}, which states that
 \begin{equation}
     \int f(s_0) \delta(g(s_0)) \td s_0 = \sum_i \frac{f(s_i)}{| \frac{\partial}{\partial s_0} g(s_0) |_{s = s_i}}, \hspace{3mm} g(s_i) = 0.
 \end{equation}
@@ -553,7 +553,9 @@ Yet, it has been already reported that choosing a non-critical modal bandwidth b
 \section{Conclusion}
 
 The present contribution discussed a novel local Wave Field Synthesis approach, relying on a suitable filter transformation that allows derivation of a temporal filter bank from an arbitrary spatial filter.
-By transforming spatial antialiasing filters to a temporal filter bank, antialiasing can be performed by simple temporal bandlimitation of the SSD driving signals, with the bandlimit depending on the virtual source model.
+By transforming spatial antialiasing filters to a temporal filter bank, antialiasing can be performed by simple temporal bandlimitation of the SSD driving signals.
+With the above antialiasing strategy local WFS can be implemented by choosing an appropriate spatial antialiasing filter based on a predefined reference listening position.
+
 
 
 
