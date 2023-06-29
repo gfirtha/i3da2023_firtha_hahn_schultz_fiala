@@ -3,7 +3,7 @@ close all
 
 q = 10;
 R0 = 2;
-Nssd = 4*600;
+Nssd = 2400;
 [x0,y0] = pol2cart(linspace(0,360*(1-1/Nssd), Nssd)'*pi/180,repmat(R0,Nssd,1));
 x0 = [x0,y0];
 n0 = -x0/R0;

@@ -473,23 +473,23 @@ while Figure \ref{Fig:assymm_antialiasing}, illustrating asymmetrical filtering 
 In both cases in Figure \ref{Fig:symm_antialiasing} and \ref{Fig:assymm_antialiasing} (a) the reference position is denoted by a black cross.
 
 \section{Comparison with direct modal bandlimitation}
-Finally, the performance of the proposed Local Wave Field Synthesis approach is compared with conventional a LWFS implementation, based on direct modal bandlimitation.
-
-\input{lwfs-spl.tex}
-
 \begin{figure*}[h!]
     \begin{center}
-        \begin{overpic}[width = 0.45\columnwidth]{figs/firtha_center.png}
+        \begin{overpic}[width = 0.45\columnwidth]{figs/firtha_center2.png}
             \footnotesize \put(0,2){(a)}
+            \footnotesize \put(45,102){Center}
         \end{overpic} \hspace{3mm}
-        \begin{overpic}[width = 0.45\columnwidth]{figs/firtha_right.png}
+        \begin{overpic}[width = 0.45\columnwidth]{figs/firtha_left2.png}
             \footnotesize \put(0,2){(b)}
+            \footnotesize \put(45,102){Left}
         \end{overpic}\hspace{3mm}
         \begin{overpic}[width = 0.45\columnwidth]{figs/firtha_front.png}
             \footnotesize \put(0,2){(c)}
+            \footnotesize \put(45,102){Front}
         \end{overpic} \hspace{3mm}
         \begin{overpic}[width = 0.45\columnwidth]{figs/firtha_back.png}
             \footnotesize \put(0,2){(d)}
+            \footnotesize \put(45,102){Back}
         \end{overpic}\\  \vspace{5mm}
         \begin{overpic}[width = 0.45\columnwidth]{figs/nara_center.png}
             \footnotesize \put(0,2){(e)}
@@ -516,9 +516,16 @@ Finally, the performance of the proposed Local Wave Field Synthesis approach is 
             \footnotesize \put(0,2){(l)}
         \end{overpic}\\
     \end{center}
-    \caption{fg}
+    \caption{Comparison of the proposed, temporal filtering/based LWFS approach with direct modal bandlimitation.
+    }
     \label{Fig:aliasing}
 \end{figure*}
+
+Finally, the performance of the proposed Local Wave Field Synthesis approach is compared with conventional a LWFS implementation, based on direct modal bandlimitation.
+
+\input{lwfs-spl.tex}
+
+
 
 \section{Conclusion}
 
