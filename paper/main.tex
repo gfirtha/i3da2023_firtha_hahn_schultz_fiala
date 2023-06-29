@@ -300,7 +300,7 @@ As a further general WFS assumption it is supposed that the SSD is locally plane
 These requirements inherently ensure that a single solution exists for \eqref{eq:zero}\footnote{Except for a plane wave arriving normally to the SSD, at which case the temporal filter is transformed into a Dirac-delta.}.
 With these assumptions the phase function is given as
 \begin{equation}
-    \tau(\vx) = \hat{k}^P_x(\vx) \, x +  \hat{k}^P_y(\vx) \, y
+   \tau(\vx) = \frac{\hat{k}^P_x(\vx) \, x +  \hat{k}^P_y(\vx) \, y}{c}
 \end{equation}
 and \eqref{eq:zero} is satisfied where
 \begin{equation}
@@ -330,7 +330,8 @@ In the following the direct application for local WFS is discussed.
 
 Figure \ref{Fig:aliasing} (d) reflects that the overlapping of the sampled driving function spectra, and, therefore, the presence of aliasing waves can be avoided by spatially bandlimiting the driving functions to the Nyquist wavenumber prior to sampling.
 Spatial bandlimitation can be straightforwardly performed by designing a suitable spatial antialiasing filter and transforming it into an equivalent temporal filter bank, based on the results of the previous section.
-An important advantage of the above temporal filtering is that the driving functions may be evaluated in the discrete SSD positions, and a subsequent temporal antialiasing inherently ensures analytical spatial bandlimitation.
+An important advantage of the above temporal filtering is that the driving functions may be evaluated in the discrete SSD positions, and a subsequent temporal antialiasing inherently ensures analytical spatial bandlimitation\footnote{
+    The above statement holds as long as temporally continuous driving functions are assumed. Once the driving functions are sampled with a sampling frequency $f_s = 1 /\Delta t$, this corresponds to a spatial sampling prior to the filtering process with $\Delta s = c/f_s$.}.
 
 Spectral overlapping can be avoided by bandlimiting the driving function to the sampling wavenumber $k_{s,\mathrm{s}} = \frac{2\pi}{\Delta s}$, with either symmetrically to $k_s = 0$ or by choosing an arbitrary central wavenumber $k_{s,0}$.
 First the former case is investigated in details.
@@ -516,7 +517,7 @@ In both cases in Figure \ref{Fig:symm_antialiasing} and \ref{Fig:assymm_antialia
             \footnotesize \put(0,2){(l)}
         \end{overpic}\\
     \end{center}
-    \caption{Comparison of the proposed, temporal filtering/based LWFS approach with direct modal bandlimitation.
+    \caption{Comparison of the proposed, temporal filtering-based LWFS approach with direct modal bandlimitation.
     First row (a-d) depicts the synthesized field with temporal LWFS, Second row (e-h) depicts the synthesized field with modal bandlimitation and third row (i-l) compares the frequency response at the reference position.}
     \label{Fig:comparison}
 \end{figure*}
@@ -524,8 +525,8 @@ In both cases in Figure \ref{Fig:symm_antialiasing} and \ref{Fig:assymm_antialia
 Finally, the performance of the proposed Local Wave Field Synthesis approach is compared with conventional a LWFS implementation, based on direct modal bandlimitation.
 \input{lwfs-spl.tex}
 
-The two methods are compared via the exemplary synthesis scenario discussed in the foregoing, synthesizing an impulsive plane wave.
-The result of synthesis for four different reference positions are investigated:
+The two methods are compared via the exemplary synthesis scenario discussed in the foregoing, synthesizing an impulsive plane wave, by bandlimiting the driving functions to the Nyquist wavenumber.
+The result of synthesis is investigated for four different reference positions:
 \begin{itemize}
     \item Center: $\vxref = \left[0,0,0\right]^{\mathrm{T}}$
     \item Left: $\vxref = \left[0,1,0\right]^{\mathrm{T}}$
@@ -536,9 +537,25 @@ Figure \ref{Fig:comparison} presents the comparison of the result of the two app
 The first row (a-d) shows the synthesized field at the time instant of the plane wave pass-by through the reference position by implementing the proposed LWFS approach, with the second row (e-h) depicting the same result with using modal bandlimitation. 
 The third row illustrates the measured frequency response of the synthesized fields at the reference positions.
 
+The figures reflects that both methods are capable of sufficient suppression of the aliasing wave fronts at the prescribed reference position in a qualitatively similar manner.
+The measured frequency responses show that the presented approach slightly suffers from ripples above the spatial aliasing frequency.
+This remaining aliasing artifact can be explained as the result of the approximations, introduced in the derivation of the temporal-to-spatial filter transform.
+
+In the center position the modal bandlimitation approach serves as a reference solution, with nearly perfect aliasing suppression.
+For off-center positions both methods suffers from remaining aliasing artifacts.
+This effect is even enhanced in the case of the front position, in which case the receiver/reference position is closer to the stationary SSD position (white SSD element).
+The phenomena is explained by the spatial variation of the spatial aliasing frequency and the aliasing intensity, which has been already investigated in details in \cite{8611109} in a geometrical manner.
+The incorporation of this effect in the present antialiasing strategy is the subject of a further research. 
+Yet, it has been already reported that choosing a non-critical modal bandwidth below the Nyquist wavenumber is an efficient strategy to avoid these remaining aliasing wavefront \cite{Hahn17:EUSIPCO}.
+
 
 
 \section{Conclusion}
+
+The present contribution discussed a novel local Wave Field Synthesis approach, relying on a suitable filter transformation that allows derivation of a temporal filter bank from an arbitrary spatial filter.
+By transforming spatial antialiasing filters to a temporal filter bank, antialiasing can be performed by simple temporal bandlimitation of the SSD driving signals, with the bandlimit depending on the virtual source model.
+
+
 
 \section*{Acknowledgment}
 
