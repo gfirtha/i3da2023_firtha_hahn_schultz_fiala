@@ -70,15 +70,15 @@ One prominent sound field synthesis method is Wave Field Synthesis (WFS) \cite{B
 
 As WFS obtains the necessary driving functions from a suitable boundary integral representation of the target sound field, perfect phase correct field-reconstruction could be only achieved by employing a theoretical, continuous secondary source distribution.
 In practical applications the SSD constist of discrete loudspeaker elements, resulting in secondary wavefronts additionally to the intended virtual wavefront, emerging from the individual SSD elements, termed as aliasing waves.
-This spatial aliasing phenomena is perceived as the coloration of the synthesized sound field above the spatial aliasing frequency, varying with the listening position and the virtual wavefront direction, heavily degrading the quality of reproduction.
+This spatial aliasing phenomena is perceived as the coloration of the synthesized sound field above the spatial aliasing frequency, varying with the listening position and the virtual wavefront direction, heavily degrading the quality of reproduction \cite{8371275, 8611109}.
 
 The effect of aliasing can be mitigated by restricting the synthesis to a smaller control region inside the listening area at the cost of permitting stronger aliasing artifacts outside the control region.
 These anti-aliased WFS approaches are commonly referred to as Local Wave Field Synthesis (LWFS).
-Conventional LWFS approaches achieve increased local synthesis accuracy by the direct spatial bandlimitation of the WFS driving functions \cite{}.
+Conventional LWFS approaches achieve increased local synthesis accuracy by the direct spatial bandlimitation of the WFS driving functions \cite{Winter2016-TASL, Hahn17:EUSIPCO}.
 However, due to the high computational demand the real-time application of these LWFS approaches is not straightforward.
 
 The present contribution introduces a novel LWFS approach, relying merely on the temporal bandlimitation of the SSD driving functions.
-The temporal filters, defined uniquely for each SSD elements, are obtained from spatial antialiasing filters by means of an analytical spatial-to-temporal filter transformation, introduced by the current authors in a previous contribution \cite{firtha_daga}.
+The temporal filters, defined uniquely for each SSD elements, are obtained from spatial antialiasing filters by means of an analytical spatial-to-temporal filter transformation, introduced by the current authors in a previous contribution \cite{firtha_daga2023}.
 Similarly to other LWFS techniques, the presented approach ensures aliasing-free synthesis at a predefined listening position at the cost of temporally bandlimited sound field at other listening regions.
 The results of the proposed approach are compared with a conventional LWFS approach employing direct spatial bandlimitation.
 
@@ -386,7 +386,11 @@ Therefore, the present antialiasing strategy ensures aliasing-free synthesis alo
 The direction of the line of aliasing-free synthesis is marked with a dashed arrow in the figure.
 This is in contrast with previous local WFS approaches, in which the synthesis is optimized in the proximity of a pre-defined reference position over a circular area.
 
-It should be noted that the presented spatial-to-temporal filter transform strategy can be also interpreted as a frequency dependent spatial windowing approach:
+It should be noted that in the angular frequency domain the filtered driving function is written as
+\begin{equation}
+    D'_t(s,\omega) = D(s,\omega) H_t(s,\omega) =  H_x\left(-k_t^P(s)\right) \, D(s,\omega),
+\end{equation}
+from which formulation it is apparent that in the frequency domain the presented spatial-to-temporal filter transform strategy can be also interpreted as a frequency dependent spatial windowing approach, and the frequency dependent spatial window is given by $H_x\left(-k_t^P(s)\right)$:
 in the aspect of antialiasing filtering SSD positions where the local wavenumber vector is higher than the Nyquist wavenumber are highly attenuated, with the window width decreasing with increasing angular frequency.
 \begin{figure}[]
     \begin{overpic}[width = 1\columnwidth]{figs/equivalent_windows.png}
