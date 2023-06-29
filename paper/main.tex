@@ -573,13 +573,22 @@ Yet, it has been already reported that choosing a non-critical modal bandwidth b
 
 \section{Conclusion}
 
-The present contribution discussed a novel local Wave Field Synthesis approach, relying on a filter transformation that allows derivation of a temporal filter bank from an arbitrary spatial filter.
-By transforming spatial antialiasing filters to a temporal filter bank, antialiasing can be performed by simple temporal bandlimitation of the SSD driving signals.
-With the above antialiasing strategy local WFS can be implemented by choosing an appropriate spatial antialiasing filter based on a predefined reference listening position.
+The present contribution discussed a novel local Wave Field Synthesis approach, allowing an increased synthesis accuracy in the proximity of a reference position when a sparse SSD is applied for sound field reproduction.
+The approach relies on a filter transformation that allows derivation of a temporal filter bank from an arbitrary spatial filter.
+Local WFS is achieved by spatial bandlimiting of the SSD driving function to the Nyquist wavenumber, achieved by suitable spatial filtering.
+By transforming the spatial antialiasing filters to a temporal filter bank, LWFS can be performed by the simple temporal bandlimitation of the SSD driving signals.
 
-It was demonstrated via numerical simulations that the approach is capable of the suppression of aliasing wavefronts along a straight line/ray (containing the reference position) with its direction of adjusted by the center wavenumber of the antialiasing spatial band-pass filter.
-The performance of the presetned approach was compared with LWFS by direct modal bandlimitation as a direct, reference solution.
-It was shown, that temporal LWFS gives a feasible approximation for the reference, while being a more robust approach, with less computational demand, allowing real-time implementations. 
+It was demonstrated via numerical simulations that the approach is capable of the suppression of aliasing wavefronts along a straight line/ray, passing through a predefined the reference position.
+The direction of antialiasing synthesis can be set by adjusting the center wavenumber of the antialiasing spatial band-pass filter.
+The performance of the presetned approach was compared with LWFS by direct modal bandlimitation taken as a direct, reference solution.
+It was shown that temporal LWFS gives a feasible approximation for the reference one, while being a more robust approach with less computational demand, allowing even real-time implementations. 
+Furthermore, altough the proposed approach was validated via the example of a virtual plane wave, the technique is capable of the aliasing-free synthesis of an arbitrary simple virtual field model.
+
+It was demonstrated that both approaches suffer for remaining aliasing artifacts in off-center reference positions that's suppression is the topic of further research.
+
+Finally, as an important limitation of the proposed technique it has to be pointed out, that since the proposed approach bandlimits the driving signals as the function of the local propagation direction of the virtual field on the SSD, therefore, the overall synthesis bandlimit varies with the virtual source direction/position.
+This can result in enhanced artifacts in case of a non-stationary virtual field, e.g. in case of the synthesis of a moving source.
+The workaround for this phenomena is also the subject of future research.
 
 \section*{Acknowledgment}
 
