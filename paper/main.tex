@@ -74,7 +74,7 @@ This spatial aliasing phenomena is perceived as the coloration of the synthesize
 
 The effect of aliasing can be mitigated by restricting the synthesis to a smaller control region inside the listening area at the cost of permitting stronger aliasing artifacts outside the control region.
 These anti-aliased WFS approaches are commonly referred to as Local Wave Field Synthesis (LWFS).
-Conventional LWFS approaches achieve increased local synthesis accuracy by the direct spatial bandlimitation of the WFS driving functions \cite{Winter2016-TASL, Hahn17:EUSIPCO}.
+Conventional LWFS approaches achieve increased local synthesis accuracy by the direct spatial bandlimitation of the WFS driving functions \cite{Winter2016-TASL, Hahn16:AES, Hahn17:EUSIPCO, hahn2022cylindrical}.
 However, due to the high computational demand the real-time application of these LWFS approaches is not straightforward.
 
 The present contribution introduces a novel LWFS approach, relying merely on the temporal bandlimitation of the SSD driving functions.
@@ -211,7 +211,7 @@ Since the conventional driving functions are not-bandlimited, therefore, the rep
 
 According to the sampling theorem, spatial aliasing can be avoided by analytically spatial-bandlimiting the driving functions to the Nyquist wavenumber.
 This can be performed by either spatially filtering the driving functions with an appropriate spatial low-pass filter prior to numerical evaluation, or performing bandlimitation directly in the wavenumber (modal) domain analytically.
-The latter approach is implemented by \cite{Nara and Fiete}, and will serve as a reference solution in the following investigation.
+The latter approach is implemented by \cite{hahn2022cylindrical}, and will serve as a reference solution in the following investigation.
 However, the modal bandlimitation solution is available only for plane wave and point source virtual source models synthesized by a circular SSD, at the cost of increased computational complexity.
 
 In the following an alternative, approximate solution is presented, allowing spatial antialiasing filtering for an arbitrary virtual source model and arbitrary SSD contour, performed by FIR filtering in the temporal domain.
@@ -517,13 +517,24 @@ In both cases in Figure \ref{Fig:symm_antialiasing} and \ref{Fig:assymm_antialia
         \end{overpic}\\
     \end{center}
     \caption{Comparison of the proposed, temporal filtering/based LWFS approach with direct modal bandlimitation.
-    }
-    \label{Fig:aliasing}
+    First row (a-d) depicts the synthesized field with temporal LWFS, Second row (e-h) depicts the synthesized field with modal bandlimitation and third row (i-l) compares the frequency response at the reference position.}
+    \label{Fig:comparison}
 \end{figure*}
 
 Finally, the performance of the proposed Local Wave Field Synthesis approach is compared with conventional a LWFS implementation, based on direct modal bandlimitation.
-
 \input{lwfs-spl.tex}
+
+The two methods are compared via the exemplary synthesis scenario discussed in the foregoing, synthesizing an impulsive plane wave.
+The result of synthesis for four different reference positions are investigated:
+\begin{itemize}
+    \item Center: $\vxref = \left[0,0,0\right]^{\mathrm{T}}$
+    \item Left: $\vxref = \left[0,1,0\right]^{\mathrm{T}}$
+    \item Back: $\vxref = \left[-1,0,0\right]^{\mathrm{T}}$
+    \item Front: $\vxref = \left[1,0,0\right]^{\mathrm{T}}$
+\end{itemize}
+Figure \ref{Fig:comparison} presents the comparison of the result of the two approaches, each column illustrating a different reference position.
+The first row (a-d) shows the synthesized field at the time instant of the plane wave pass-by through the reference position by implementing the proposed LWFS approach, with the second row (e-h) depicting the same result with using modal bandlimitation. 
+The third row illustrates the measured frequency response of the synthesized fields at the reference positions.
 
 
 
