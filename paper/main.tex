@@ -474,7 +474,23 @@ while Figure \ref{Fig:assymm_antialiasing}, illustrating asymmetrical filtering 
 In both cases in Figure \ref{Fig:symm_antialiasing} and \ref{Fig:assymm_antialiasing} (a) the reference position is denoted by a black cross.
 
 \section{Comparison with direct modal bandlimitation}
-\begin{figure*}[h!]
+
+\begin{figure}[]
+    \begin{center}
+        \begin{overpic}[width = 0.75\columnwidth]{figs/nara_spectrum_center.png}
+            \footnotesize \put(0,2){(a)}
+        \end{overpic}
+        \\
+        \begin{overpic}[width = 0.75\columnwidth]{figs/nara_spectrum_left.png}
+            \footnotesize \put(0,0){(b)}
+        \end{overpic}
+    \end{center}
+    \caption{Spectrum of LWFS driving functions by direct modal bandlimitation with the reference position choosen at the center, $\vxref = \left[0,0,0\right]^{\mathrm{T}}$ (a) and on the left side, $\vxref = \left[0,1,0\right]^{\mathrm{T}}$ (b).
+    }
+    \label{Fig:nara_spectrum}
+\end{figure}
+
+\begin{figure*}[]
     \begin{center}
         \begin{overpic}[width = 0.45\columnwidth]{figs/firtha_center2.png}
             \footnotesize \put(0,2){(a)}
@@ -533,7 +549,12 @@ The result of synthesis is investigated for four different reference positions:
     \item Back: $\vxref = \left[-1,0,0\right]^{\mathrm{T}}$
     \item Front: $\vxref = \left[1,0,0\right]^{\mathrm{T}}$
 \end{itemize}
-Figure \ref{Fig:comparison} presents the comparison of the result of the two approaches, each column illustrating a different reference position.
+
+For the central and the left reference positions first the spectra of the driving functions were investigated.
+Figure \ref{Fig:nara_spectrum} already reflects the fact that the proposed temporal LWFS approach is an approximation of the reference solution, i.e. of the direct modal bandlimitation.
+It is verified that modal bandlimitation LWFS performs the same "steering" of the modal spectrum into the direction of the central wavenumber, realizing a freuqency dependent spatial band-pass filter.
+
+Figure \ref{Fig:comparison} presents the comparison of the result of the two approaches via the synthesized field and the frequency response, each column illustrating a different reference position.
 The first row (a-d) shows the synthesized field at the time instant of the plane wave pass-by through the reference position by implementing the proposed LWFS approach, with the second row (e-h) depicting the same result with using modal bandlimitation. 
 The third row illustrates the measured frequency response of the synthesized fields at the reference positions.
 
@@ -552,12 +573,13 @@ Yet, it has been already reported that choosing a non-critical modal bandwidth b
 
 \section{Conclusion}
 
-The present contribution discussed a novel local Wave Field Synthesis approach, relying on a suitable filter transformation that allows derivation of a temporal filter bank from an arbitrary spatial filter.
+The present contribution discussed a novel local Wave Field Synthesis approach, relying on a filter transformation that allows derivation of a temporal filter bank from an arbitrary spatial filter.
 By transforming spatial antialiasing filters to a temporal filter bank, antialiasing can be performed by simple temporal bandlimitation of the SSD driving signals.
 With the above antialiasing strategy local WFS can be implemented by choosing an appropriate spatial antialiasing filter based on a predefined reference listening position.
 
-
-
+It was demonstrated via numerical simulations that the approach is capable of the suppression of aliasing wavefronts along a straight line/ray (containing the reference position) with its direction of adjusted by the center wavenumber of the antialiasing spatial band-pass filter.
+The performance of the presetned approach was compared with LWFS by direct modal bandlimitation as a direct, reference solution.
+It was shown, that temporal LWFS gives a feasible approximation for the reference, while being a more robust approach, with less computational demand, allowing real-time implementations. 
 
 \section*{Acknowledgment}
 
