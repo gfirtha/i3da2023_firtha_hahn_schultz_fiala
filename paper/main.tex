@@ -64,28 +64,36 @@
 \end{IEEEkeywords}
 
 \section{Introduction}
+\label{sec:introduction}
 The aim of sound field synthesis is to reproduce a virtual target sound field over an extended listening area using a densely spaced loudspeaker arrangement, known as the secondary source distribution (SSD).
 By feeding the loudspeakers with specific driving functions, the superposition of sound fields from each SSD element should ideally match the target sound field in the intended receiving area.
 One prominent sound field synthesis method is Wave Field Synthesis (WFS) \cite{Berkhout1993:Acoustic_control_by_WFS, Start1997:phd}. 
 
 As WFS obtains the necessary driving functions from a suitable boundary integral representation of the target sound field, perfect phase correct field-reconstruction could be only achieved by employing a theoretical, continuous secondary source distribution.
-In practical applications the SSD constist of discrete loudspeaker elements, resulting in secondary wavefronts additionally to the intended virtual wavefront, emerging from the individual SSD elements, termed as aliasing waves.
-This spatial aliasing phenomena is perceived as the coloration of the synthesized sound field above the spatial aliasing frequency, varying with the listening position and the virtual wavefront direction, heavily degrading the quality of reproduction \cite{8371275, 8611109}.
+In practical applications the SSD consist of discrete loudspeaker elements, resulting in secondary wavefronts additionally to the intended virtual wavefront, emerging from the individual SSD elements, termed as aliasing waves.
+This spatial aliasing phenomena is perceived as the coloration of the synthesized sound field above the spatial aliasing frequency, varying with the listening position and the virtual wavefront direction, degrading the quality of reproduction \cite{8371275, 8611109}.
 
-The effect of aliasing can be mitigated by restricting the synthesis to a smaller control region inside the listening area at the cost of permitting stronger aliasing artifacts outside the control region.
+The effect of aliasing can be mitigated by restricting the synthesis to a smaller control region inside the listening area at the cost of permitting stronger aliasing artifacts outside the region of interest.
 These anti-aliased WFS approaches are commonly referred to as Local Wave Field Synthesis (LWFS).
-Conventional LWFS approaches achieve increased local synthesis accuracy by the direct spatial bandlimitation of the WFS driving functions \cite{Winter2016-TASL, Hahn16:AES, Hahn17:EUSIPCO, hahn2022cylindrical}.
+Recently introduced LWFS approaches achieve increased local synthesis accuracy by the direct spatial bandlimitation of the WFS driving functions \cite{Winter2016-TASL, Hahn16:AES, Hahn17:EUSIPCO, hahn2022cylindrical}.
 However, due to the high computational demand the real-time application of these LWFS approaches is not straightforward.
 
 The present contribution introduces a novel LWFS approach, relying merely on the temporal bandlimitation of the SSD driving functions.
 The temporal filters, defined uniquely for each SSD elements, are obtained from spatial antialiasing filters by means of an analytical spatial-to-temporal filter transformation, introduced by the current authors in a previous contribution \cite{firtha_daga2023}.
 Similarly to other LWFS techniques, the presented approach ensures aliasing-free synthesis at a predefined listening position at the cost of temporally bandlimited sound field at other listening regions.
-The results of the proposed approach are compared with a conventional LWFS approach employing direct spatial bandlimitation.
+The results of the proposed approach are compared with a recent LWFS approach employing direct spatial bandlimitation.
+
+The paper is organized as follows:
+Section \ref{sec:theory} gives a brief theoretical introduction on basic WFS theory and spatial aliasing phenomena. 
+Section \ref{sec:novel_approach} first discusses the spatial-to-temporal filter transform, then introduces the novel local WFS methodology.
+Section \ref{sec:evaluation} gives a comparison of the presented technique with a recent LWFS approach based on direct modal bandlimitation, followed by a short summary and outlook in section \ref{sec:conclusion}. 
 
 \section{Theoretical basics}
+\label{sec:theory}
+
 \subsection{The local propagation vector:}
 Consider an arbitrary steady-state free space sound field at an angular frequency $\omega$.
-As a standard ansatz in the field of geometrical acoustics the sound field can be written in the general polar from as
+As a standard ansatz in the field of geometrical acoustics the sound field is written in the general polar from as
 %
 \begin{equation}
     P(\vx,\omega) = A(\vx) \te^{- \ti \omega \tau(\vx)},
@@ -115,7 +123,11 @@ In the temporal domain it points into the local propagation direction at the tim
 %For simplicity, in the followings we assume that all the involved fields propagate horizontally in the plane of investigation, i.e. $\hat{k}_z^P(x,y,0) = 0$.
 
 \subsection{Conventional 2.5D Wave Field Synthesis}
-Consider a smooth convex secondary source distribution located at $\vxo = \posvec{3}{x_0}{y_0}{0}$ consisting of a continuous distribution of 3D point sources, described by the 3D freefield Green's function.
+Consider a smooth convex secondary source distribution located at $\vxo = \posvec{3}{x_0}{y_0}{0}$ consisting of a continuous distribution of 3D point sources, described by the 3D freefield Green's function, reading in the frequency domain as
+\begin{equation}
+    G_{3 \mathrm{D}}(\vx,\vxo,\omega) = \frac{1}{4\pi}\frac{\te^{-\frac{\omega}{c}\left| \vx-\vxo\right|}}{\left| \vx-\vxo\right|},
+\end{equation}
+where $\omega$ denotes the angular frequency.
 In this geometry the target field inside the area bounded by the SSD is described by the  Kirchhoff approximation of 2.5D Kirchhoff-Helmholtz integral, from which the 2.5D driving functions can be extracted.
 For an arbitrary simple target virtual sound field $P(\vxo,\omega)$ the steady-state driving functions read as \cite{Firtha2016}
 \begin{equation}
@@ -127,13 +139,13 @@ For an arbitrary simple target virtual sound field $P(\vxo,\omega)$ the steady-s
 \end{equation}
 The driving function consists of
 \begin{itemize}
-    \item a frequency dependent pre-equalization filter $H_{\text{pre}}(\omega)$,
-    \item a secondary source selection window
+    \item a frequency dependent pre-equalization filter $H_{\text{pre}}(\omega)$ \cite{Start1997:phd, doi:10.1121/1.404755, Bleistein1986},
+    \item a secondary source selection window \cite{Nicol1999, Spors2007}
           \begin{equation}
               w(\vxo) = \max{\left( \hat{k}_{\mathrm{n}}^P(\vxo),0\right)},
           \end{equation}
           where $\hat{k}_{\mathrm{n}}^P(\vxo)$ is the normal component of the local propagation vector,
-    \item a gain factor $\sqrt{d_{\mathrm{ref}}(\vxo)}$ allowing amplitude correction along a reference curve, depending on the actual virtual field model (c.f. \cite{Firtha2016}),
+    \item a gain factor $\sqrt{d_{\mathrm{ref}}(\vxo)}$ allowing amplitude correction along a reference curve, depending on the actual virtual field model (c.f. \cite{Start1997:phd} and for a more complete treatise \cite{Firtha2016}),
     \item and the virtual field measured on the SSD.
 \end{itemize}
 Assuming a simple virtual sound field as given by \eqref{eq:Pxw} the driving functions can be written as
@@ -148,7 +160,7 @@ and in the time domain as
     \label{eq:d_wfs_td}
 \end{equation}
 with $A^D(\vxo)$ being the real valued overall gain factor of the driving function, $\ast_t$ denoting temporal convolution and $h_{\text{pre}}(t)$ is the temporal WFS prefilter impulse response.
-The analytical pre-equalization filter impulse response is given in \cite{Deregowski1983, Firtha2019phd}, while for an ideal FIR filter implementation the reader is referred to \cite{Schultz2016}.
+The analytical, continuous pre-equalization filter impulse response is given in \cite{Deregowski1983, Firtha2019phd}, while for an ideal, non-casual FIR filter implementation the reader is referred to \cite{Schultz2016}.
 In the following due to the associativity of convolution this prefiltering is excluded from the discussion.
 
 \subsection{Aliasing artifacts in WFS}
@@ -169,11 +181,11 @@ In the following due to the associativity of convolution this prefiltering is ex
             \footnotesize \put(0,0){(d)}
         \end{overpic}
     \end{center}
-    \caption{The synthesized field and the spatial spectrum of the driving function in case of ideal, quasi-continuous SSD (a) and (c), and in case of a discretized SSD (b) and (d).
-    It is important ot note that the spatial spectrum depicts only the non-zero Fourier components (i.e. the Fourier series coefficients) normalized to the sampling wavenumber.}
+    \caption{The synthesized field (top) and the spatial spectrum (bottom) of the driving function in case of ideal, quasi-continuous SSD (a) and (c), and in case of a discretized SSD (b) and (d).
+    It is important to note that the spatial spectrum depicts only the non-zero Fourier components (i.e. the Fourier series coefficients) normalized to the sampling wavenumber.}
     \label{Fig:aliasing}
 \end{figure*}
-Conventional WFS theory assumes a continuous secondary source distribution.
+The backbone of WFS theory assumes a continuous secondary source distribution.
 In practical applications the SSD is composed of evenly spaced discrete source elements.
 As a result, \emph{aliasing wavefronts} emerge from the individual secondary sources, following the intended virtual wavefront, leading to a \emph{spatial aliasing phenomena}.
 Although localization does not degrade due to the precedence effect, aliasing is perceived as strong coloration predominantly in the high-frequency region varying with the receiver position and the virtual source position/direction, occurring predominantly above the \emph{aliasing frequency}.
@@ -184,7 +196,7 @@ The aliased synthesis in the temporal domain is depicted in Figure \ref{Fig:alia
 
 Mathematically, aliasing can be modeled as the discretization of the theoretically continuous driving functions:
 Assume that a suitable parametrization $d(s,t)$ of the secondary source is given, e.g. the arc length $s = R_0\, \cos \phi$ in case of a circular SSD (where $\phi$ is the polar angle), or the linear position on an infinite long linear SSD.
-The discretization process is given by sampling the driving function by a sampling function, consisting of a series of Dirac-deltas in the actual secondary source positions:
+The discretization process is modeled by sampling the driving function by a sampling function, consisting of a series of Dirac-deltas, where the impulse occurences match the actual SSD positions:
 \begin{equation}
     d_s(s,t) = \sum_{\nu = 0}^{N_0-1} d(s,t) \, \delta(s - \nu \Delta s) \, \Delta s,
     \label{eq:sampling_td}
@@ -196,18 +208,21 @@ By investigating the sampling process in the frequency-wavenumber domain, the sp
     \tilde{D}_s(k_s,\omega) = \sum_{\nu = -\infty}^{\infty} \tilde{D}\left(k_s- \nu \frac{2\pi}{\Delta s},\omega\right) \Delta s,
     \label{eq:sampling_fd}
 \end{equation}
-where $t \rightarrow \omega$ and $s \rightarrow k_s$ are Fourier-transform pairs.
-Obviously, for a closed SSD contour (most notablz for a circular SSD) the continuous spatial Fourier-transform yields a discrete spectrum, consisting of non-zero components only on the multiples of the spatial wavenumber, i.e. at
+where $t \rightarrow \omega$ and $s \rightarrow k_s$ are variables pairs for the Fourier-transform.
+Obviously, for a closed SSD contour (most notably for a circular SSD) the continuous spatial Fourier-transform yields a discrete spectrum, consisting of non-zero components only on the multiples of the spatial wavenumber, i.e. at
 \begin{equation}
     k_s = \frac{m}{R_0},
 \end{equation}
 constituting a Fourier series.
 
-In the followings the spatial spectrum refers to the distribution of the non-zero wavenumber values, and the corresponding wavenumber refers to the spatial frequency of the harmonic basis functions, measured along the closed curve.
+In the followings the spatial spectrum refers to the distribution of the non-zero wavenumber values, and the corresponding wavenumber refers to the spatial frequency (multipled by $2\pi$) of the harmonic basis functions, measured along the closed curve.
 Figure \ref{Fig:aliasing} (c) and (d) illustrate the quasi-continuous and the sampled driving function's spectra.
 
-From \eqref{eq:sampling_fd} it can be concluded that due to spatial sampling, the wavenumber content of the driving function is repeated on the multiples of the sampling wavenumber $k_{s, \mathrm{s}} = \frac{2\pi}{\Delta s}$.
-Since the conventional driving functions are not-bandlimited, therefore, the repeating spectra will overlap above the Nyquist wavenumber $k_{s, \mathrm{Nyq}} = \frac{\pi}{\Delta s}$, for which the corresponding angular frequency is the aliasing frequency of the discretization scheme, as depicted in \ref{Fig:aliasing} (d).
+From \eqref{eq:sampling_fd} it can be concluded that due to spatial sampling, the wavenumber content of the driving function is repeated on the multiples of the sampling wavenumber
+\begin{equation}
+k_{s, \mathrm{s}} = \frac{2\pi}{\Delta s}.
+\end{equation}
+Since the conventional driving functions are not-bandlimited, therefore, the repeating spectra will overlap above the Nyquist wavenumber $k_{s, \mathrm{Nyq}} = \frac{\pi}{\Delta s}$, for which the corresponding angular frequency is the aliasing frequency of the discretization scheme, as depicted in Figure \ref{Fig:aliasing} (d).
 
 According to the sampling theorem, spatial aliasing can be avoided by analytically spatial-bandlimiting the driving functions to the Nyquist wavenumber.
 This can be performed by either spatially filtering the driving functions with an appropriate spatial low-pass filter prior to numerical evaluation, or performing bandlimitation directly in the wavenumber (modal) domain analytically.
@@ -217,11 +232,12 @@ However, the modal bandlimitation solution is available only for plane wave and 
 In the following an alternative, approximate solution is presented, allowing spatial antialiasing filtering for an arbitrary virtual source model and arbitrary SSD contour, performed by FIR filtering in the temporal domain.
 The technique relies on an analytic transform of spatially defined antialiasing filters to an equivalent temporal domain filter bank.
 
-\section{Time domain antialiasing filter}
+\section{Time domain antialiasing LWFS}
+\label{sec:novel_approach}
 
 \subsection{Spatial to temporal filter transform}
 First, a general analytical approach is introduced allowing the transform of an arbitrary spatial filter to an equivalent temporal filter set.
-From herein, subscript $x$ and $t$ distinguishes wether a filter is defined as a spatial or the temporal filters, respectively.
+From herein, subscript $x$ and $t$ distinguishes wether a filter is defined as a spatial or a temporal filter, respectively.
 
 Assume an arbitrary filter impulse response defined in the spatial domain, denoted by $h_x(s)$.
 Again, $s$ is a suitable parametrization of the SSD contour.
@@ -246,7 +262,7 @@ holds.
 
 \subsubsection{The exact transformation}
 The following transformation is allowed by the spatio-temporal structures of the conventional driving functions \eqref{eq:d_wfs_td}, in which the spatial and temporal dimensions are interconnected in the argument of a Dirac-delta, due to the wave propagation characteristics.
-The main idea of the derivation is that by exploiting the sifting property of the Dirac-delta in the driving functions, both spatial and temporal convolutions \eqref{eq:spatial_conv} and \eqref{eq:temp_conv} can be evaluated, from which the temporal filter impulse responses can be expressed as the function of the spatial one.
+The main idea of the derivation is that by exploiting the sifting property of the Dirac-delta in the driving functions, both spatial and temporal convolutions \eqref{eq:spatial_conv} and \eqref{eq:temp_conv} can be evaluated, from which the temporal filter impulse responses can be expressed as the function of the spatial ones.
 Again, in the following the pre-equalization filter is omitted from discussion, since equalization filtering can be performed following the antialiasing process.
 
 The temporal convolution in \eqref{eq:temp_conv} can be evaluated by substituting the general WFS driving function \eqref{eq:d_wfs_td} and exploiting the sifting property of the Dirac-delta, yielding
@@ -474,6 +490,7 @@ while Figure \ref{Fig:assymm_antialiasing}, illustrating asymmetrical filtering 
 In both cases in Figure \ref{Fig:symm_antialiasing} and \ref{Fig:assymm_antialiasing} (a) the reference position is denoted by a black cross.
 
 \section{Comparison with direct modal bandlimitation}
+\label{sec:evaluation}
 
 \begin{figure}[]
     \begin{center}
@@ -569,9 +586,8 @@ The phenomena is explained by the spatial variation of the spatial aliasing freq
 The incorporation of this effect in the present antialiasing strategy is the subject of a further research. 
 Yet, it has been already reported that choosing a non-critical modal bandwidth below the Nyquist wavenumber is an efficient strategy to avoid these remaining aliasing wavefront \cite{Hahn17:EUSIPCO}.
 
-
-
 \section{Conclusion}
+\label{sec:conclusion}
 
 The present contribution discussed a novel local Wave Field Synthesis approach, allowing an increased synthesis accuracy in the proximity of a reference position when a sparse SSD is applied for sound field reproduction.
 The approach relies on a filter transformation that allows derivation of a temporal filter bank from an arbitrary spatial filter.
