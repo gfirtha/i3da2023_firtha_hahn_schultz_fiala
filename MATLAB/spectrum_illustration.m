@@ -15,10 +15,10 @@ xs = [3,0];
 omega = 2*pi*(0:N-1)'/N*fs;
 H_pre = fft(get_wfs_prefilter(N,fs),N);
 
-W = 1;
+W0 = 1;
 k0a = 2;
 [amp,delay] = get_delay_and_gain(x0,n0,xs,xr);
-[AA0,k0] = get_antialiasing_filters(x0(1:q:end,:),n0(1:q:end,:),xs,xr,fs,N,W);
+[AA0,k0] = get_antialiasing_filters(x0(1:q:end,:),n0(1:q:end,:),xs,xr,fs,N,W0);
 AA = zeros(N,Nssd);
 AA(:,1:q:end) = AA0;
 %D_wfs = ifft((H_pre*amp.').*exp(-1i*omega*delay'),length(omega),1,'symmetric');
