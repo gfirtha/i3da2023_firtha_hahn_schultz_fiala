@@ -139,7 +139,7 @@ For an arbitrary simple target virtual sound field $P(\vxo,\omega)$ the steady-s
 \end{equation}
 The driving function consists of
 \begin{itemize}
-    \item a frequency dependent pre-equalization filter $H_{\text{pre}}(\omega)$ \cite{Start1997:phd, doi:10.1121/1.404755, Bleistein1986},
+    \item a frequency dependent pre-equalization filter $H_{\text{pre}}(\omega)$ \cite{Start1997:phd, Berkhout1993:Acoustic_control_by_WFS, Bleistein1986},
     \item a secondary source selection window \cite{Nicol1999, Spors2007}
           \begin{equation}
               w(\vxo) = \max{\left( \hat{k}_{\mathrm{n}}^P(\vxo),0\right)},
@@ -336,18 +336,18 @@ By denoting $\mathcal{F}\left( h_x(s)\right) = H_x(k_s)$ the corresponding trans
     H_t\left(s,\omega\right) = H_x\left(-\frac{\omega}{c}\hat{k}_t^P(s)\right) = H_x\left(-k_t^P(s)\right),
     \label{eq:frequency_transform}
 \end{equation}
-where $k_t^P(s)$ is the tangential component of the local wavenumber vector, being a vector in a steady state sound field, pointing in the local propagation direction with the length being $\omega/c$ \cite{Firtha2019phd}.
+where $k_t^P(s)$ is the tangential component of the local wavenumber vector \footnote{The local wavenumber vector can be defined for a steady state sound field, pointing in the local propagation direction with the length being $\omega/c$ \cite{Firtha2019phd}}.
 Hence, as the main result of the present discussion, the temporal filter transfer can be obtained from the wavenumber (modal) content of the spatial filter by simple rescaling in terms of the local wavenumber vector.
 
-The validity and the error analysis of the above filter transform was investigated in details in \cite{Firtha DAGA2023}.
+The validity and the error analysis of the above filter transform was investigated in details in \cite{firtha_daga2023}.
 In the following the direct application for local WFS is discussed.
 
 \subsection{Application for antialiasing filtering}
 
 Figure \ref{Fig:aliasing} (d) reflects that the overlapping of the sampled driving function spectra, and, therefore, the presence of aliasing waves can be avoided by spatially bandlimiting the driving functions to the Nyquist wavenumber prior to sampling.
 Spatial bandlimitation can be straightforwardly performed by designing a suitable spatial antialiasing filter and transforming it into an equivalent temporal filter bank, based on the results of the previous section.
-An important advantage of the above temporal filtering is that the driving functions may be evaluated in the discrete SSD positions, and a subsequent temporal antialiasing inherently ensures analytical spatial bandlimitation\footnote{
-    The above statement holds as long as temporally continuous driving functions are assumed. Once the driving functions are sampled with a sampling frequency $f_s = 1 /\Delta t$, this corresponds to a spatial sampling prior to the filtering process with $\Delta s = c/f_s$.}.
+An important advantage of the temporal filtering approach instead of direct spatial filtering is that analyical spatial bandlimitation can be achieved by calculating the WFS driving functions at discrete positions, followed by temporal filtering \footnote{
+The above statement holds as long as temporally continuous driving functions are assumed. Once the driving functions are sampled with a sampling frequency $f_s = 1 /\Delta t$, this corresponds to a spatial sampling prior to the filtering process with $\Delta s = c/f_s$.}.
 
 Spectral overlapping can be avoided by bandlimiting the driving function to the sampling wavenumber $k_{s,\mathrm{s}} = \frac{2\pi}{\Delta s}$, with either symmetrically to $k_s = 0$ or by choosing an arbitrary central wavenumber $k_{s,0}$.
 First the former case is investigated in details.
@@ -376,7 +376,7 @@ In the present case the sampling arc length is given by $\Delta s = \frac{2 \pi 
 \begin{equation}
     \omega_c(s) = \frac{ N}{ 2 R_0 } \frac{c}{\hat{k}_t^P(s)}.
 \end{equation}
-The antialiasing filters were a 4-th order Butterworth deisgn.
+The antialiasing filters are 4-th order Butterworth designs.
 
 Figure (a) shows the result of the synthesis, while Figure (b) illustrates the spectrum of the bandlimited, sampled driving functions.
 \begin{figure}[h!]
@@ -394,16 +394,16 @@ Figure (a) shows the result of the synthesis, while Figure (b) illustrates the s
 \end{figure}
 It is highlighted that the presented antialiasing strategy ensures suppressed aliasing waves in the center of the circular source array.
 In other positions of the listening area lateral aliasing wavefronts remain in the reproduced wave field, while the target, virtual wave front is bandlimited.
-This phenomena can be easily understood by investigating the synthesis scenario in a geometrical manner:
+This phenomenon can be easily understood by investigating the synthesis scenario in a geometrical manner:
 
-Since the cutoff frequency of the antialiasing filter (Eq. \eqref{eq:cutoff_fr} ) is inversely proportional to the tangential component of the virtual field on the SSD, therefore, in a circular array a single SSD element will have nearly fullband driving signal: that SSD element at which the wavefront arrives perpendicularly.
+Since the cutoff frequency of the antialiasing filter (Eq. \eqref{eq:cutoff_fr}) is inversely proportional to the tangential component of the virtual field on the SSD, therefore, in a circular array a single SSD element will have nearly fullband driving signal: that SSD element at which the wavefront arrives perpendicularly (i.e. where the tangential component of the local propagation vector is zero).
 This fullband SSD element is marked with white dot in Figure \ref{Fig:symm_antialiasing} (a).
 From general WFS theory it is known that the fullband SSD element will dominate the synthesized wavefront (i.e. will serve as a stationary SSD position) for spatial positions along a straight line crossing the actual SSD element into the direction of the local propagation vector.
 Therefore, the present antialiasing strategy ensures aliasing-free synthesis along a straight line for which the fullband SSD element is the stationary secondary source.
 The direction of the line of aliasing-free synthesis is marked with a dashed arrow in the figure.
 This is in contrast with previous local WFS approaches, in which the synthesis is optimized in the proximity of a pre-defined reference position over a circular area.
 
-It should be noted that in the angular frequency domain the filtered driving function is written as
+It should be noted that in the angular, temporal frequency domain the filtered driving function is written as
 \begin{equation}
     D'_t(s,\omega) = D(s,\omega) H_t(s,\omega) =  H_x\left(-k_t^P(s)\right) \, D(s,\omega),
 \end{equation}
