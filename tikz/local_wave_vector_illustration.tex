@@ -1,0 +1,90 @@
+% for Firtha, Hahn, Schultz, Fiala (2023): "Local Wave Field Synthesis by Temporal Bandlimitation", I3DA Bologna
+%
+% code taken from
+% https://github.com/spatialaudio/wfs_chapter_hda/blob/master/graphics_DEU/spa_25d.tex
+% i.e. the project wfs_chapter_hda
+% - git repository https://github.com/spatialaudio/wfs_chapter_hda
+% - drafts for the chapters (english, german) on **Wave Field Synthesis** for
+% Stefan Weinzierl (ed.): *Handbuch der Audiotechnik*, 2nd ed., Springer,
+% https://link.springer.com/referencework/10.1007/978-3-662-60357-4
+% - text and graphics under CC BY 4.0 license https://creativecommons.org/licenses/by/4.0/
+% - source code under MIT license https://opensource.org/licenses/MIT
+% - Springer has copyright to the final english / german chapters and their layouts
+% - we might also find https://git.iem.at/zotter/wfs-basics useful
+% - we use violine image from https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Violin.svg/2048px-Violin.svg.png to create picture `python/violin_wfs.png`
+% - Frank Schultz, https://orcid.org/0000-0002-3010-0294, https://github.com/fs446
+% - Nara Hahn, https://orcid.org/0000-0003-3564-5864, https://github.com/narahahn
+% - Sascha Spors, https://orcid.org/0000-0001-7225-9992, https://github.com/spors
+\documentclass[tikz]{standalone}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{tkz-euclide}
+\usetikzlibrary{shapes,snakes}
+% we should use matplotlib colors:
+\definecolor{C0}{HTML}{1f77b4}
+\definecolor{C1}{HTML}{ff7f0e}
+\definecolor{C7}{HTML}{7f7f7f}
+
+% tikz stuff
+% \tikzAngleOfLine from
+% https://tex.stackexchange.com/questions/25342/how-to-draw-orthogonal-vectors-using-tikz
+\makeatletter
+\newcommand{\tikzAngleOfLine}{\tikz@AngleOfLine}
+\def\tikz@AngleOfLine(#1)(#2)#3{%
+  \pgfmathanglebetweenpoints{%
+    \pgfpointanchor{#1}{center}}{%
+    \pgfpointanchor{#2}{center}}
+  \pgfmathsetmacro{#3}{\pgfmathresult}%
+}
+\makeatother
+\tikzset{mark coordinate/.style={inner sep=0pt,
+                                   outer sep=0pt,
+                                   minimum size=3pt,
+                                   fill=#1,
+                                   circle}
+                                   }
+
+\begin{document}
+\begin{tikzpicture}[scale=1,show background rectangle]
+\begin{scope}
+
+% these coordinates / parameters can be freely chosen:
+\coordinate (x0) at (-1.5,0);  % determines the radius of SSD
+\coordinate (xPS) at (-3.5,2);  % make sure that point source is outside of SSD
+% for wave pattern 'snake=expanding waves' stuff
+\def \segmentangle {30};  % opening angle of wave pattern in deg
+\def \segmentlength {5};  % somehow determines the wavelength
+\def \wavepatternlength {3.5};  % determines how far the wave propagates into the SSD
+
+% ---> change with care:
+\coordinate (origin) at (0,0);
+% SSD circle
+\node[name path=FullSSDCircle, draw, thin, color=black, circle through=(x0)] (FullSSDCircleNode) at (origin) {};
+% wave pattern to x0
+\draw[snake=expanding waves, segment angle=\segmentangle, segment length=\segmentlength, color=C7!33] (xPS)  -- (x0);
+% wave pattern additionally into SSD, length is defined with \wavepatternlength
+\tikzAngleOfLine(x0)(xPS){\angle};
+\draw[snake=expanding waves, segment angle=\segmentangle, segment length=\segmentlength, color=C7!33] (xPS)  -- ++(\angle:-\wavepatternlength);
+% line from point source to specific SSD point
+\draw[-, thick, C7] (xPS) -- (x0) node[left, black]{$\bm{x}_0$};
+% normal / tangent vectors of SSD at x0
+\tikzAngleOfLine(origin)(x0){\angle};
+\draw[->, >=stealth', thick, C0] (x0) -- ++(\angle:-1) node[right]{$\hat{\bm{n}}_0$};
+\draw[->, >=stealth', thick, C1] (x0) -- ++(\angle-90:-1) node[below]{$\hat{\bm{n}}_t$};
+% normal / tangent vectors of sound field at x0
+\tikzAngleOfLine(x0)(xPS){\angle};
+\draw[->, >=stealth', thick, C1] (x0) -- ++(\angle:-1) node[right]{$\hat{\bm{k}}$};
+\draw[->, >=stealth', thick, C0] (x0) -- ++(\angle+90:-1) node[right]{$\hat{\bm{k}}_t$};
+% black dots indicating positions of point source and specific SSD point
+\draw[thick] (xPS) coordinate [mark coordinate=black, label=left:{$\bm{x}_\text{PS}$}];
+\draw[thick] (x0) coordinate [mark coordinate=black];
+% <---
+
+% !!!
+% these projection lines are hard coded for (x0) at (-1.5,0); (xPS) at (-3.5,2);
+\draw[dashed, C0] (-0.79,0.7) -- (-0.79,0) node[below] {$\hat{k}_t$};
+\draw[dashed, C1] (-0.8,-0.7) -- (-1.5,-0.7) node[left] {$\hat{k}_t$};
+
+\end{scope}
+\end{tikzpicture}
+\end{document}
