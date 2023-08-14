@@ -11,6 +11,33 @@
 \usepackage{nicefrac}
 \usepackage{overpic,subfigure, tikz}
 
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{tkz-euclide}
+\usetikzlibrary{shapes,snakes}
+% we should use matplotlib colors:
+\definecolor{C0}{HTML}{1f77b4}
+\definecolor{C1}{HTML}{ff7f0e}
+\definecolor{C7}{HTML}{7f7f7f}
+
+\makeatletter
+\newcommand{\tikzAngleOfLine}{\tikz@AngleOfLine}
+\def\tikz@AngleOfLine(#1)(#2)#3{%
+  \pgfmathanglebetweenpoints{%
+    \pgfpointanchor{#1}{center}}{%
+    \pgfpointanchor{#2}{center}}
+  \pgfmathsetmacro{#3}{\pgfmathresult}%
+}
+\makeatother
+\tikzset{mark coordinate/.style={inner sep=0pt,
+                                   outer sep=0pt,
+                                   minimum size=3pt,
+                                   fill=#1,
+                                   circle}
+                                   }
+
+
+
 \input{scidefs}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -228,7 +255,7 @@ Since the conventional driving functions are not-bandlimited, therefore, the rep
 According to the sampling theorem, spatial aliasing can be avoided by analytically spatial-bandlimiting the driving functions to the Nyquist wavenumber.
 This can be performed by either spatially filtering the driving functions with an appropriate spatial low-pass filter prior to numerical evaluation, or performing bandlimitation directly in the wavenumber (modal) domain analytically.
 The latter approach is implemented by \cite{hahn2022cylindrical}, and will serve as a reference solution in the following investigation.
-However, the modal bandlimitation solution is available only for plane wave and point source virtual source models, at the cost of increased computational complexity.
+However, the modal bandlimitation solution is available so far only for plane wave and point source virtual source models---where the driving functions can be derived analytically---, at the cost of increased computational complexity.
 
 In the following an alternative, approximate solution is presented, allowing spatial antialiasing filtering for an arbitrary virtual source model and arbitrary SSD contour, performed by FIR (finite impulse response) filtering in the temporal domain.
 The technique relies on an analytic transform of spatially defined antialiasing filters to an equivalent temporal domain filter bank.
@@ -300,8 +327,58 @@ Here $\hat{k}_t^P(s_0)$ is the tangential component of the local propagation vec
 \begin{equation}
     \hat{k}_t^P(s_0) = \mathbf{t}^{\mathrm{T}}(s_0) \hat{\vk}^P(s_0),
 \end{equation}
-with $\mathbf{t}^{\mathrm{T}}(s_0)$ denoting the unity long tangential vector of the SSD element at position $s_0$.
+with $\mathbf{t}^{\mathrm{T}}(s_0)$ denoting the unity long tangential vector of the SSD element at position $s_0$, as illustrated in Figure \ref{fig:tangential_local_prop_vec}.
 
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[scale=1.2 ]
+    \begin{scope}
+    
+    % these coordinates / parameters can be freely chosen:
+    \coordinate (x0) at (-1.5,0);  % determines the radius of SSD
+    \coordinate (xPS) at (-3.5,2);  % make sure that point source is outside of SSD
+    % for wave pattern 'snake=expanding waves' stuff
+    \def \segmentangle {30};  % opening angle of wave pattern in deg
+    \def \segmentlength {5};  % somehow determines the wavelength
+    \def \wavepatternlength {3.5};  % determines how far the wave propagates into the SSD
+    
+    % ---> change with care:
+    \coordinate (origin) at (0,0);
+    % SSD circle
+    \node[name path=FullSSDCircle, draw, thin, color=black, circle through=(x0)] (FullSSDCircleNode) at (origin) {};
+    % wave pattern to x0
+    \draw[snake=expanding waves, segment angle=\segmentangle, segment length=\segmentlength, color=C7!33] (xPS)  -- (x0);
+    % wave pattern additionally into SSD, length is defined with \wavepatternlength
+    \tikzAngleOfLine(x0)(xPS){\angle};
+    \draw[snake=expanding waves, segment angle=\segmentangle, segment length=\segmentlength, color=C7!33] (xPS)  -- ++(\angle:-\wavepatternlength);
+    % line from point source to specific SSD point
+    \draw[-, thick, C7] (xPS) -- (x0) node[left, black]{$\bm{x}_0$};
+    % normal / tangent vectors of SSD at x0
+    \tikzAngleOfLine(origin)(x0){\angle};
+    \draw[->, >=stealth', thick, C0] (x0) -- ++(\angle:-1) node[right]{$\bm{n}$};
+    \draw[->, >=stealth', thick, C1] (x0) -- ++(\angle-90:-1) node[below]{$\bm{t}$};
+    % normal / tangent vectors of sound field at x0
+    \tikzAngleOfLine(x0)(xPS){\angle};
+    \draw[->, >=stealth', thick, C1] (x0) -- ++(\angle:-1) node[right]{$\hat{\bm{k}}$};
+    \draw[->, >=stealth', thick, C0] (x0) -- ++(\angle+90:-1) node[right]{$\hat{\bm{k}}_t$};
+    % black dots indicating positions of point source and specific SSD point
+    \draw[thick] (xPS) coordinate [mark coordinate=black, label=left:{$\bm{x}_\text{PS}$}];
+    \draw[thick] (x0) coordinate [mark coordinate=black];
+    % <---
+    
+    % !!!
+    % these projection lines are hard coded for (x0) at (-1.5,0); (xPS) at (-3.5,2);
+    \draw[dashed, C0] (-0.79,0.7) -- (-0.79,0) node[below] {$\hat{k}_t$};
+    \draw[dashed, C1] (-0.8,-0.7) -- (-1.5,-0.7) node[left] {$\hat{k}_t$};
+    
+    \end{scope}
+    \end{tikzpicture}
+\end{center}
+\caption{Illustration for the tangential component of the local propagation vector in the exemplary case of the field of a virtual point source, located at $\vx_{\mathrm{PS}}$ and applying a circular SSD.
+On the figure $\bm{t}$ and $\bm{n}$ denote the tangential and normal vector of the SSD respectively, $\hat{\bm{k}}_t$ denotes the tangential vector of the sound sound field and $\hat{k}_t$ denote the tangential component of the local propagation vector ($\hat{\bm{k}}$) at the SSD position $\vxo$.}
+\label{fig:tangential_local_prop_vec}
+\end{figure}
+    
 With the above assumptions the integral \eqref{eq:spat_conv2} can be evaluated, yielding
 \begin{equation}
     d'_x(s,t+ \tau(s) ) =  \frac{ c }{|\hat{k}_t^P(s_i)|} \, h_x(s-s_i) \, A^D(s_i)
@@ -404,7 +481,7 @@ This phenomenon can be understood by investigating the synthesis scenario in a g
 
 Since the cutoff frequency of the antialiasing filter (Eq. \eqref{eq:cutoff_fr}) is inversely proportional to the tangential component of the virtual field on the SSD, in a circular array a single SSD element will have nearly fullband driving signal: that SSD element at which the wavefront arrives perpendicularly (i.e. where the tangential component of the local propagation vector is zero).
 This fullband SSD element is marked with white dot in Figure \ref{Fig:symm_antialiasing} (a).
-From general WFS theory it is known that the fullband SSD element will dominate the synthesized wavefront (i.e. will serve as a stationary SSD position) for spatial positions along a straight line crossing the actual SSD element into the direction of the local propagation vector.
+From general WFS theory it is known that the fullband SSD element will dominate the synthesized wavefront (i.e. will serve as a stationary SSD position) for spatial positions along a straight line crossing the actual SSD element into the direction of the local propagation vector \cite{Firtha2019phd}.
 Therefore, the present antialiasing strategy ensures aliasing-free synthesis along a straight line for which the fullband SSD element is the stationary secondary source.
 The direction of the line of aliasing-free synthesis is marked with a dashed arrow in the figure.
 This is in contrast with previous LWFS approaches, in which the synthesis is optimized in the proximity of a pre-defined reference position over a circular area.
